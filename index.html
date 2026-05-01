@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Plants">
+<meta name="theme-color" content="#1B4332">
+<title>My Plants — Bremen</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --green:#2D6A4F; --green-dark:#1B4332; --green-light:#D8F3DC; --green-mid:#95D5B2;
+  --cream:#F7F3EC; --cream-dark:#E8E0D0; --text:#1C1C18; --text-muted:#6B6B60;
+  --text-light:#9A9A8A; --card:#FFFFFF;
+  --warn:#FFF3CD; --warn-b:#D4A017; --warn-t:#5C3D00;
+  --danger:#FFEBEB; --danger-b:#D44; --danger-t:#6B0000;
+  --info:#EBF4FF; --info-b:#5B9BD5; --info-t:#1A3A5C;
+  --ok:#EBFAF0; --ok-b:#3D9970; --ok-t:#0D3D22;
+  --safe-top:env(safe-area-inset-top); --safe-bot:env(safe-area-inset-bottom);
+}
+html { height:100%; background:var(--green-dark); }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); min-height:100dvh; overflow-x:hidden; }
+
+.header { background:var(--green-dark); padding:calc(var(--safe-top) + 16px) 20px 24px; position:relative; overflow:hidden; }
+.header::after { content:''; position:absolute; bottom:-50px; right:-30px; width:160px; height:160px; border-radius:50%; background:rgba(149,213,178,0.08); pointer-events:none; }
+.header-eyebrow { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--green-mid); margin-bottom:6px; }
+.header-title { font-family:'Lora',serif; font-size:28px; font-weight:400; color:#fff; line-height:1.1; margin-bottom:4px; }
+.header-sub { font-size:13px; color:var(--green-mid); opacity:0.75; }
+
+.body { padding:20px 16px calc(var(--safe-bot) + 24px); max-width:500px; margin:0 auto; }
+
+.weather-card { background:var(--card); border-radius:20px; padding:18px; margin-bottom:20px; box-shadow:0 2px 16px rgba(0,0,0,0.06); }
+.weather-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.weather-desc { font-family:'Lora',serif; font-size:22px; color:var(--text); line-height:1.2; }
+.weather-time { font-size:11px; color:var(--text-light); margin-top:3px; }
+.refresh-btn { background:var(--green-light); border:none; border-radius:10px; width:38px; height:38px; font-size:18px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+.refresh-btn:active { transform:scale(0.9); }
+.refresh-btn.spinning { animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.metrics { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:16px; }
+.metric { background:var(--cream); border-radius:12px; padding:10px 6px; text-align:center; }
+.metric-val { font-size:16px; font-weight:500; color:var(--text); line-height:1; white-space:nowrap; }
+.metric-lbl { font-size:9px; color:var(--text-light); margin-top:4px; text-transform:uppercase; letter-spacing:0.05em; }
+.section-label { font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+.forecast-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.forecast-day { background:var(--cream); border-radius:12px; padding:10px 8px; text-align:center; }
+.fc-day { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; }
+.fc-icon { font-size:18px; margin:4px 0; }
+.fc-temp { font-size:13px; font-weight:500; color:var(--text); }
+.fc-rain { font-size:11px; color:var(--info-b); margin-top:2px; }
+.divider { height:1px; background:var(--cream-dark); margin:16px 0; }
+
+.alerts-wrap { margin-bottom:20px; }
+.alert { border-radius:14px; padding:13px 14px; margin-bottom:10px; border-left:3px solid; display:flex; gap:11px; animation:fadeUp 0.3s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.alert-warn   { background:var(--warn);   border-color:var(--warn-b); }
+.alert-danger { background:var(--danger); border-color:var(--danger-b); }
+.alert-info   { background:var(--info);   border-color:var(--info-b); }
+.alert-ok     { background:var(--ok);     border-color:var(--ok-b); }
+.alert-icon { font-size:20px; flex-shrink:0; line-height:1.3; }
+.alert-msg { font-size:14px; line-height:1.55; }
+.alert-warn .alert-msg   { color:var(--warn-t); }
+.alert-danger .alert-msg { color:var(--danger-t); }
+.alert-info .alert-msg   { color:var(--info-t); }
+.alert-ok .alert-msg     { color:var(--ok-t); }
+.alert-plants { font-size:11px; margin-top:4px; opacity:0.65; }
+.alert-warn .alert-plants   { color:var(--warn-t); }
+.alert-danger .alert-plants { color:var(--danger-t); }
+.alert-info .alert-plants   { color:var(--info-t); }
+.alert-ok .alert-plants     { color:var(--ok-t); }
+
+.plant-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.plant-card { background:var(--card); border-radius:16px; padding:14px; box-shadow:0 1px 8px rgba(0,0,0,0.05); cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; -webkit-user-select:none; }
+.plant-card:active { transform:scale(0.97); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+.plant-name { font-family:'Lora',serif; font-size:14px; font-weight:500; color:var(--text); line-height:1.3; margin-bottom:2px; }
+.plant-latin { font-size:11px; color:var(--text-light); font-style:italic; margin-bottom:8px; line-height:1.3; }
+.plant-badge { display:inline-block; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:500; }
+.badge-balcony  { background:#D8F3DC; color:#1B4332; }
+.badge-living   { background:#EEF2FF; color:#2D3A8C; }
+.badge-office   { background:#FFF7ED; color:#7C3A00; }
+.badge-kitchen  { background:#FEF9C3; color:#6B5200; }
+.badge-bathroom { background:#F0F9FF; color:#0C4A6E; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.25s ease; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal { background:var(--cream); border-radius:24px 24px 0 0; width:100%; max-height:88dvh; overflow-y:auto; transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.32,0.72,0,1); padding-bottom:calc(var(--safe-bot) + 24px); -webkit-overflow-scrolling:touch; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal-handle { width:36px; height:4px; background:var(--cream-dark); border-radius:2px; margin:12px auto 0; }
+.modal-img { width:100%; height:260px; object-fit:contain; background:#fff; display:block; margin-top:12px; }
+.modal-body { padding:20px 20px 8px; }
+.modal-name { font-family:'Lora',serif; font-size:26px; font-weight:500; color:var(--text); margin-bottom:3px; }
+.modal-latin { font-size:14px; font-style:italic; color:var(--text-muted); margin-bottom:8px; }
+.modal-loc { margin-bottom:4px; }
+.modal-section { font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin:20px 0 10px; }
+.needs-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.need-card { background:#fff; border-radius:14px; padding:12px 14px; }
+.need-icon { font-size:20px; margin-bottom:6px; }
+.need-label { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:3px; }
+.need-value { font-size:14px; font-weight:500; color:var(--text); line-height:1.3; }
+.watering-card { background:#fff; border-radius:14px; padding:14px; margin-top:8px; }
+.watering-text { font-size:14px; line-height:1.6; color:var(--text); }
+.seasonal-list { background:#fff; border-radius:14px; padding:14px; margin-top:8px; }
+.season-row { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid var(--cream); font-size:13px; line-height:1.4; }
+.season-row:last-child { border-bottom:none; padding-bottom:0; }
+.season-name { font-weight:500; color:var(--green-dark); min-width:60px; flex-shrink:0; }
+.season-info { color:var(--text-muted); }
+
+.loading { font-size:14px; color:var(--text-muted); padding:12px 0; font-style:italic; }
+.error-box { background:var(--danger); border-left:3px solid var(--danger-b); border-radius:14px; padding:13px 14px; font-size:14px; color:var(--danger-t); }
+footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">🌿 Plant Care</div>
+  <div class="header-title">My Plants</div>
+  <div class="header-sub">Bremen · 14 plants</div>
+</div>
+
+<div class="body">
+  <div class="weather-card">
+    <div class="weather-top">
+      <div><div class="weather-desc" id="wdesc">Loading...</div><div class="weather-time" id="wtime"></div></div>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadAll()">↻</button>
+    </div>
+    <div class="metrics" id="metrics"><div class="metric"><div class="metric-val">—</div><div class="metric-lbl">Temp</div></div></div>
+    <div class="divider"></div>
+    <div class="section-label">3-day forecast</div>
+    <div class="forecast-row" id="forecast"><div class="loading">Loading...</div></div>
+  </div>
+  <div class="section-label">Plant alerts today</div>
+  <div class="alerts-wrap" id="alerts"><div class="loading">Checking conditions...</div></div>
+  <div class="section-label">Your plants</div>
+  <div class="plant-grid" id="plantgrid"></div>
+  <footer>Weather: Open-Meteo · Bremen 53.08°N 8.80°E</footer>
+</div>
+
+<div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <img class="modal-img" id="modal-img" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-latin" id="modal-latin"></div>
+      <div class="modal-loc" id="modal-loc"></div>
+      <div class="modal-section">Basic needs</div>
+      <div class="needs-grid" id="modal-needs"></div>
+      <div class="modal-section">Watering</div>
+      <div class="watering-card"><div class="watering-text" id="modal-watering"></div></div>
+      <div class="modal-section">Seasonal care</div>
+      <div class="seasonal-list" id="modal-seasonal"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WMO={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Icy fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snowfall',75:'Heavy snow',80:'Showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm + hail',99:'Thunderstorm + hail'};
+const WIC={0:'☀️',1:'🌤',2:'⛅️',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',61:'🌦',63:'🌧',65:'🌧',71:'🌨',73:'❄️',75:'❄️',80:'🌧',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
+const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+const plants=[
+  {key:'japanese_maple',name:'Japanese Maple',latin:'Acer palmatum',loc:'Balcony',badge:'balcony',frost:true,wind:true,
+   needs:[{icon:'☀️',label:'Light',value:'Morning sun, afternoon shade'},{icon:'💧',label:'Water',value:'Every 1–2 days, daily in summer'},{icon:'🌡',label:'Temperature',value:'Hardy to −15°C'},{icon:'🌱',label:'Soil',value:'Acidic, well-draining (pH 5.5–6.5)'}],
+   watering:'If very dry: soak pot from below for 30–60 min. Ongoing: water when top 2 cm is dry. Use saucer but empty after rain.',
+   seasonal:[{s:'Spring',t:'Cover if frost forecast. Apply fertilizer once.'},{s:'Summer',t:'Water daily. Ensure afternoon shade.'},{s:'Autumn',t:'Reduce watering. Prune if needed.'},{s:'Winter',t:'Wrap pot for insulation. Water sparingly.'}]},
+  {key:'strawberry',name:'Strawberry',latin:"Fragaria × ananassa 'Elan'",loc:'Balcony',badge:'balcony',frost:false,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'6+ hrs direct sun daily'},{icon:'💧',label:'Water',value:'Daily — never let dry out'},{icon:'🌡',label:'Temperature',value:'15–25°C preferred'},{icon:'🌱',label:'Soil',value:'Slightly acidic, enriched'}],
+   watering:'Water at soil level, not on leaves or fruit. Check daily — small pots dry fast. Empty saucer after rain.',
+   seasonal:[{s:'Spring',t:'Move to balcony when frost risk passes.'},{s:'Summer',t:'Fruit season — water daily, feed every 2 weeks.'},{s:'Autumn',t:'Cut back, let plant rest.'},{s:'Winter',t:'Bring indoors or insulate pot.'}]},
+  {key:'cherry_tomato',name:'Cherry Tomato',latin:"Solanum lycopersicum 'Ildi'",loc:'Balcony',badge:'balcony',frost:true,wind:true,
+   needs:[{icon:'☀️',label:'Light',value:'Full sun, 6–8 hrs minimum'},{icon:'💧',label:'Water',value:'Deeply and regularly'},{icon:'🌡',label:'Temperature',value:'Outside from late May only'},{icon:'🌱',label:'Soil',value:'Rich, well-draining with perlite'}],
+   watering:'Water at soil level. Avoid wetting leaves. Check daily in summer. Consistent moisture prevents blossom-end rot.',
+   seasonal:[{s:'Spring',t:'Keep indoors until after mid-May frosts.'},{s:'Summer',t:'Main growing and fruiting season.'},{s:'Autumn',t:'Harvest before first frost.'},{s:'Winter',t:'Annual — compost after season.'}]},
+  {key:'glechoma',name:'Ground Ivy',latin:'Glechoma hederacea',loc:'Living room',badge:'living',frost:false,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Partial to full shade'},{icon:'💧',label:'Water',value:'Moderately — check weekly'},{icon:'🌡',label:'Temperature',value:'Very hardy, tolerates frost'},{icon:'🌱',label:'Soil',value:'Any well-draining mix'}],
+   watering:'Tolerant of some neglect. Check weekly. Reduce in winter. Keep in pot — invasive if planted in garden.',
+   seasonal:[{s:'Spring',t:'Grows vigorously — trim regularly.'},{s:'Summer',t:'Keep trimmed, fertilize monthly.'},{s:'Autumn',t:'Growth slows.'},{s:'Winter',t:'May die back — keep barely moist, will regrow.'}]},
+  {key:'strelitzia',name:'Bird of Paradise',latin:'Strelitzia reginae',loc:'Office',badge:'office',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
+   watering:'Less is more — overwatering is the main killer. Water deeply, then wait. In winter: once every 3–4 weeks only.',
+   seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright indoor spot. Minimal water.'}]},
+  {key:'monstera',name:'Monstera',latin:'Monstera deliciosa',loc:'Living room',badge:'living',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'When top 3–5 cm is dry'},{icon:'🌡',label:'Temperature',value:'15–30°C'},{icon:'🌱',label:'Soil',value:'Well-draining with perlite'}],
+   watering:'Stick finger 3–5 cm deep — water only when dry. Yellowing = overwatering. Wipe leaves occasionally.',
+   seasonal:[{s:'Spring',t:'Active growth — water and feed regularly.'},{s:'Summer',t:'Feed every 2–4 weeks.'},{s:'Autumn',t:'Reduce watering.'},{s:'Winter',t:'Water every 2–3 weeks. Stop fertilizing.'}]},
+  {key:'fern',name:'Fern',latin:'Nephrolepis / Asplenium sp.',loc:'Bathroom',badge:'bathroom',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Low to medium indirect'},{icon:'💧',label:'Water',value:'Consistently moist — never dry'},{icon:'🌡',label:'Temperature',value:'15–24°C'},{icon:'💦',label:'Humidity',value:'High — bathroom is perfect'}],
+   watering:'Check every 2–3 days. Always lightly moist. Mist fronds regularly. Sensitive to tap water fluoride — use filtered if possible.',
+   seasonal:[{s:'Spring',t:'Active growth — water and mist often.'},{s:'Summer',t:'Keep moist, mist regularly.'},{s:'Autumn',t:'Reduce watering slightly.'},{s:'Winter',t:'Never fully dry. Brown tips = too dry.'}]},
+  {key:'snake_plant',name:'Snake Plant',latin:'Dracaena trifasciata',loc:'Bathroom',badge:'bathroom',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Tolerates low light well'},{icon:'💧',label:'Water',value:'Every 2–4 weeks — drought tolerant'},{icon:'🌡',label:'Temperature',value:'15–30°C, min 10°C'},{icon:'🌱',label:'Soil',value:'Sandy or cactus mix'}],
+   watering:'Water ONLY when soil is completely dry all the way through. In winter: once a month. When in doubt — do not water.',
+   seasonal:[{s:'Spring',t:'Slightly more water as growth picks up.'},{s:'Summer',t:'Water every 2–3 weeks.'},{s:'Autumn',t:'Reduce watering.'},{s:'Winter',t:'Once a month maximum.'}]},
+  {key:'pothos',name:'Pothos',latin:'Epipremnum aureum',loc:'Bathroom',badge:'bathroom',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Low to bright indirect'},{icon:'💧',label:'Water',value:'When top 3–5 cm is dry'},{icon:'🌡',label:'Temperature',value:'15–30°C'},{icon:'🌱',label:'Soil',value:'Any well-draining mix'}],
+   watering:'Forgiving — tolerates some drying out. Yellow leaves = overwatering. Drooping = needs water. Check every 5–7 days.',
+   seasonal:[{s:'Spring',t:'Grows vigorously — feed monthly.'},{s:'Summer',t:'Water regularly, feed monthly.'},{s:'Autumn',t:'Reduce watering.'},{s:'Winter',t:'Stop fertilizing. Water less.'}]},
+  {key:'zantedeschia',name:'Calla Lily',latin:'Zantedeschia aethiopica',loc:'Living room',badge:'living',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect light'},{icon:'💧',label:'Water',value:'Moist in growth, dry when dormant'},{icon:'🌡',label:'Temperature',value:'Min 10°C — not frost-hardy'},{icon:'🌸',label:'Flowering',value:'Spring / early summer'}],
+   watering:'During growth: keep moist. After flowering: reduce and stop. Dormant: almost no water. Resume when new growth appears in late winter.',
+   seasonal:[{s:'Spring',t:'Resume watering as shoots emerge. Feed every 2 weeks.'},{s:'Summer',t:'Flowering season.'},{s:'Autumn',t:'Let foliage die back. Stop watering.'},{s:'Winter',t:'Store rhizome dry and cool.'}]},
+  {key:'chamaedorea',name:'Parlour Palm',latin:'Chamaedorea elegans',loc:'Office',badge:'office',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Low to medium indirect'},{icon:'💧',label:'Water',value:'When top 2–3 cm is dry'},{icon:'🌡',label:'Temperature',value:'16–27°C'},{icon:'💦',label:'Humidity',value:'Moderate — mist occasionally'}],
+   watering:'Water moderately. Use filtered water if possible — tap fluoride causes brown tips. Let water sit overnight if using tap.',
+   seasonal:[{s:'Spring',t:'Regular watering, feed monthly.'},{s:'Summer',t:'Mist occasionally. Feed monthly.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Wipe fronds. Minimal water.'}]},
+  {key:'basil',name:'Basil',latin:'Ocimum basilicum',loc:'Kitchen',badge:'kitchen',frost:true,wind:true,
+   needs:[{icon:'☀️',label:'Light',value:'6+ hrs — grow light recommended'},{icon:'💧',label:'Water',value:'Daily — small pot dries fast'},{icon:'🌡',label:'Temperature',value:'Always above 18°C'},{icon:'✂️',label:'Harvest',value:'Pinch above leaf node, max 1/3'}],
+   watering:'Bottom-water when possible. Check daily. Pinch flower buds immediately — once it flowers, leaves turn bitter.',
+   seasonal:[{s:'Spring',t:'Prime season — keep warm and sunny.'},{s:'Summer',t:'Harvest regularly to prevent flowering.'},{s:'Autumn',t:'Supplement with grow light as days shorten.'},{s:'Winter',t:'Annual — will die. Resow in spring.'}]},
+  {key:'fuchsia',name:'Fuchsia',latin:'Fuchsia hybrida',loc:'Living room',badge:'living',frost:true,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Partial to full shade'},{icon:'💧',label:'Water',value:'Keep moist — very thirsty in summer'},{icon:'🌡',label:'Temperature',value:'5–22°C, bring in before October'},{icon:'🌸',label:'Flowering',value:'Summer — feed high-K weekly'}],
+   watering:'Water generously in summer — check daily in warm weather. In winter: reduce drastically but never let roots fully dry.',
+   seasonal:[{s:'Spring',t:'Bring out after frost. Pinch tips. Resume feeding.'},{s:'Summer',t:'Peak flowering — high-K fertilizer weekly.'},{s:'Autumn',t:'Bring indoors before October.'},{s:'Winter',t:'Cool bright spot. Cut back half. Minimal water.'}]},
+  {key:'hedera',name:'English Ivy',latin:'Hedera helix',loc:'Kitchen',badge:'kitchen',frost:false,wind:false,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect to low light'},{icon:'💧',label:'Water',value:'Let top 2–3 cm dry between waterings'},{icon:'🌡',label:'Temperature',value:'12–21°C — prefers cool'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
+   watering:'Water moderately. Mist leaves occasionally to deter spider mites. Overwatering is the main risk.',
+   seasonal:[{s:'Spring',t:'Grows actively — feed every 2–4 weeks.'},{s:'Summer',t:'Feed regularly. Watch for spider mites.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Handles cool rooms well. Water less.'}]},
+];
+
+function openPlant(key){
+  const p=plants.find(x=>x.key===key); if(!p)return;
+  document.getElementById('modal-img').src=`images/${p.key}.jpg`;
+  document.getElementById('modal-img').alt=p.name;
+  document.getElementById('modal-name').textContent=p.name;
+  document.getElementById('modal-latin').textContent=p.latin;
+  document.getElementById('modal-loc').innerHTML=`<span class="plant-badge badge-${p.badge}">${p.loc}</span>`;
+  document.getElementById('modal-needs').innerHTML=p.needs.map(n=>`<div class="need-card"><div class="need-icon">${n.icon}</div><div class="need-label">${n.label}</div><div class="need-value">${n.value}</div></div>`).join('');
+  document.getElementById('modal-watering').textContent=p.watering;
+  document.getElementById('modal-seasonal').innerHTML=p.seasonal.map(s=>`<div class="season-row"><div class="season-name">${s.s}</div><div class="season-info">${s.t}</div></div>`).join('');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('overlay'))return;
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+let startY=0;
+document.getElementById('modal').addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+document.getElementById('modal').addEventListener('touchmove',e=>{
+  if(e.touches[0].clientY-startY>80&&document.getElementById('modal').scrollTop===0){
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+},{passive:true});
+
+async function loadAll(){
+  const btn=document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=53.0793&longitude=8.8017&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&wind_speed_unit=kmh&timezone=Europe/Berlin&forecast_days=4');
+    const d=await r.json(); const c=d.current;
+    document.getElementById('wdesc').textContent=WMO[c.weather_code]||'Mixed';
+    document.getElementById('wtime').textContent='Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('metrics').innerHTML=[
+      {v:Math.round(c.temperature_2m)+'°',l:'Temp'},
+      {v:Math.round(c.apparent_temperature)+'°',l:'Feels'},
+      {v:Math.round(c.relative_humidity_2m)+'%',l:'Humid'},
+      {v:c.precipitation.toFixed(1)+'mm',l:'Rain'},
+      {v:Math.round(c.wind_speed_10m)+' km/h',l:'Wind'},
+    ].map(m=>`<div class="metric"><div class="metric-val">${m.v}</div><div class="metric-lbl">${m.l}</div></div>`).join('');
+    const fc=d.daily;
+    document.getElementById('forecast').innerHTML=fc.time.slice(1,4).map((t,i)=>{
+      const day=new Date(t);const code=fc.weather_code[i+1];
+      return `<div class="forecast-day"><div class="fc-day">${DAYS[day.getDay()]}</div><div class="fc-icon">${WIC[code]||'🌤'}</div><div class="fc-temp">${Math.round(fc.temperature_2m_max[i+1])}° / ${Math.round(fc.temperature_2m_min[i+1])}°</div><div class="fc-rain">${fc.precipitation_sum[i+1].toFixed(1)} mm</div></div>`;
+    }).join('');
+    const w={temp:c.temperature_2m,feels:c.apparent_temperature,humidity:c.relative_humidity_2m,rain:c.precipitation,wind:c.wind_speed_10m};
+    const m2=new Date().getMonth()+1;
+    const balcony=plants.filter(p=>p.badge==='balcony').map(p=>p.name);
+    const frostSens=plants.filter(p=>p.frost&&p.badge==='balcony').map(p=>p.name);
+    const alerts=[];
+    if(w.feels<=2&&m2>=3&&m2<=5)alerts.push({t:'danger',i:'❄️',msg:`Late frost risk! Cover your Japanese Maple and bring Cherry Tomato & Basil inside.`,pl:frostSens.join(', ')});
+    else if(w.feels<=2)alerts.push({t:'danger',i:'❄️',msg:`Near freezing (feels ${Math.round(w.feels)}°C). Bring frost-sensitive balcony plants indoors.`,pl:frostSens.join(', ')});
+    if(w.temp>28)alerts.push({t:'warn',i:'☀️',msg:`Hot day (${Math.round(w.temp)}°C) — water balcony plants morning and evening.`,pl:balcony.join(', ')});
+    if(w.wind>35)alerts.push({t:'warn',i:'💨',msg:`Strong winds (${Math.round(w.wind)} km/h) — shelter Japanese Maple and Cherry Tomato.`,pl:'Japanese Maple, Cherry Tomato, Basil'});
+    else if(w.wind>22)alerts.push({t:'info',i:'💨',msg:`Breezy (${Math.round(w.wind)} km/h) — keep an eye on the Japanese Maple.`,pl:'Japanese Maple'});
+    if(w.rain>5)alerts.push({t:'ok',i:'🌧',msg:`Good rain (${w.rain.toFixed(1)} mm) — balcony plants covered. Empty saucers when it stops.`,pl:balcony.join(', ')});
+    else if(w.rain===0&&w.humidity<40)alerts.push({t:'warn',i:'💧',msg:`Very dry — water all balcony plants today.`,pl:'All balcony plants'});
+    else if(w.rain===0&&w.humidity<55)alerts.push({t:'info',i:'💧',msg:`No rain — check balcony soil and water if top 2 cm feels dry.`,pl:'Japanese Maple, Strawberry, Cherry Tomato'});
+    if(w.humidity>80)alerts.push({t:'ok',i:'🌿',msg:`High humidity — Fern, Pothos and Monstera will love it. No need to mist.`,pl:'Fern, Pothos, Monstera'});
+    if(w.temp>=15&&w.temp<=25&&w.rain<2&&w.wind<20&&m2>=4&&m2<=9)alerts.push({t:'ok',i:'🌱',msg:`Perfect growing weather today!`,pl:'All plants'});
+    if(alerts.length===0)alerts.push({t:'ok',i:'✓',msg:`All conditions normal — no special action needed today.`,pl:'All plants'});
+    document.getElementById('alerts').innerHTML=alerts.map((a,i)=>`<div class="alert alert-${a.t}" style="animation-delay:${i*0.06}s"><span class="alert-icon">${a.i}</span><div><div class="alert-msg">${a.msg}</div><div class="alert-plants">${a.pl}</div></div></div>`).join('');
+  }catch(e){
+    document.getElementById('wdesc').textContent='Error';
+    document.getElementById('alerts').innerHTML=`<div class="error-box">Could not load weather. Tap ↻ to retry.</div>`;
+  }
+  btn.classList.remove('spinning');
+}
+
+document.getElementById('plantgrid').innerHTML=plants.map(p=>`
+  <div class="plant-card" onclick="openPlant('${p.key}')">
+    <div class="plant-name">${p.name}</div>
+    <div class="plant-latin">${p.latin}</div>
+    <span class="plant-badge badge-${p.badge}">${p.loc}</span>
+  </div>`).join('');
+
+loadAll();
+</script>
+</body>
+</html>
