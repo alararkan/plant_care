@@ -145,7 +145,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 14 plants</div>
+  <div class="header-sub">Bremen · 15 plants</div>
 </div>
 
 <div class="body">
@@ -291,6 +291,10 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect to low light'},{icon:'💧',label:'Water',value:'Let top 2–3 cm dry between waterings'},{icon:'🌡',label:'Temperature',value:'12–21°C — prefers cool'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
    watering:'Water moderately. Mist leaves occasionally to deter spider mites. Overwatering is the main risk.',
    seasonal:[{s:'Spring',t:'Grows actively — feed every 2–4 weeks.'},{s:'Summer',t:'Feed regularly. Watch for spider mites.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Handles cool rooms well. Water less.'}]},
+  {key:'orchid',name:'Orchid',latin:'Phalaenopsis sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:7,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'Every 7 days, let roots dry between'},{icon:'🌡',label:'Temperature',value:'18–28°C, min 15°C at night'},{icon:'🌱',label:'Soil',value:'Bark-based orchid mix only'}],
+   watering:'Soak the pot in water for 15 min once a week, then drain fully. Never let roots sit in water. Reduce in winter if not in active growth.',
+   seasonal:[{s:'Spring',t:'Resume feeding with orchid fertilizer every 2 weeks.'},{s:'Summer',t:'Water weekly, keep bright and warm.'},{s:'Autumn',t:'Reduce watering slightly. Keep warm.'},{s:'Winter',t:'Minimal water. Cool nights (15°C) can trigger reblooming.'}]},
 ];
 
 function getWaterStatus(key, waterDays) {
