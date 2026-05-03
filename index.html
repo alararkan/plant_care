@@ -399,6 +399,22 @@ function updateModalWaterLog(key) {
   } else {
     document.getElementById('modal-water-history').innerHTML = `<div class="history-title">No waterings logged yet</div>`;
   }
+  // Repotting log
+  const repotData = window._wateringData && window._wateringData['_repot_' + key] ? window._wateringData['_repot_' + key] : null;
+  window._onValue(window._ref(window._db, `repotting/${key}`), (snap) => {
+    const rd = snap.val();
+    if (rd) {
+      const repotEntries = Object.values(rd).sort((a,b) => b.ts - a.ts);
+      const latest = repotEntries[0];
+      document.getElementById('modal-repot-status').textContent = `Last repotted: ${latest.date}`;
+      document.getElementById('modal-repot-history').innerHTML = `
+        <div class="history-title">Repotting history</div>
+        ${repotEntries.slice(0,5).map(e => `<div class="history-item">🪴 ${e.date}</div>`).join('')}`;
+    } else {
+      document.getElementById('modal-repot-status').textContent = 'Never repotted';
+      document.getElementById('modal-repot-history').innerHTML = `<div class="history-title">No repottings logged yet</div>`;
+    }
+  });
 }
 
 function openPlant(key) {
