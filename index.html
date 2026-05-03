@@ -312,7 +312,7 @@ function getWaterStatus(key, waterDays) {
   const nextDate = new Date(wateredDay);
   nextDate.setDate(nextDate.getDate() + waterDays);
   const daysUntil = Math.round((nextDate - today) / 86400000);
-  const nextStr = nextDate.toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit'});
+  const nextStr = nextDate.toLocaleDateString('en-GB', {day:'numeric', month:'long'});
   const nextLabel = daysUntil <= 0 ? `Next watering: today (${nextStr})` :
                     daysUntil === 1 ? `Next watering: tomorrow (${nextStr})` :
                     `Next watering: in ${daysUntil} days (${nextStr})`;
