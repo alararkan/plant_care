@@ -183,6 +183,14 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
         </div>
         <div class="water-history" id="modal-water-history"></div>
       </div>
+      <div class="modal-section">Repotting log</div>
+      <div class="water-log-card">
+        <div class="water-log-header">
+          <div class="water-log-status" id="modal-repot-status">Never repotted</div>
+          <button class="water-btn-main" style="background:#7C3A00;" onclick="logRepotting()">🪴 Repotted</button>
+        </div>
+        <div class="water-history" id="modal-repot-history"></div>
+      </div>
       <div class="modal-section">Basic needs</div>
       <div class="needs-grid" id="modal-needs"></div>
       <div class="modal-section">Watering</div>
@@ -369,6 +377,12 @@ function quickWater(key) {
 function logWatering() {
   if (!window._currentPlantKey || !window._db) return;
   quickWater(window._currentPlantKey);
+}
+
+function logRepotting() {
+  if (!window._currentPlantKey || !window._db) return;
+  const ts = Date.now();
+  window._push(window._ref(window._db, `repotting/${window._currentPlantKey}`), { ts, date: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}) });
 }
 
 function updateModalWaterLog(key) {
