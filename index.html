@@ -299,15 +299,29 @@ const plants=[
 
 function getWaterStatus(key, waterDays) {
   const data = window._wateringData;
-  if (!data || !data[key]) return { label:'Never watered', dot:'dot-never', daysAgo: null };
+  if (!data || !data[key]) return { label:'Never watered', dot:'dot-never', next:null };
   const entries = Object.values(data[key]);
   const latest = entries.sort((a,b) => b.ts - a.ts)[0];
-  const daysAgo = Math.floor((Date.now() - latest.ts) / 86400000);
-  if (daysAgo === 0) return { label:'Watered today', dot:'dot-ok', daysAgo };
-  if (daysAgo === 1) return { label:'Watered yesterday', dot:'dot-ok', daysAgo };
-  if (daysAgo <= waterDays) return { label:`Watered ${daysAgo} days ago`, dot:'dot-ok', daysAgo };
-  if (daysAgo <= waterDays + 1) return { label:`Due soon (${daysAgo}d ago)`, dot:'dot-soon', daysAgo };
-  return { label:`Overdue! (${daysAgo}d ago)`, dot:'dot-due', daysAgo };
+
+  // Compare calendar days, not hours
+  const today = new Date(); today.setHours(0,0,0,0);
+  const wateredDay = new Date(latest.ts); wateredDay.setHours(0,0,0,0);
+  const daysAgo = Math.round((today - wateredDay) / 86400000);
+
+  // Next watering date
+  const nextDate = new Date(wateredDay);
+  nextDate.setDate(nextDate.getDate() + waterDays);
+  const daysUntil = Math.round((nextDate - today) / 86400000);
+  const nextStr = nextDate.toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit'});
+  const nextLabel = daysUntil <= 0 ? `Next watering: today (${nextStr})` :
+                    daysUntil === 1 ? `Next watering: tomorrow (${nextStr})` :
+                    `Next watering: in ${daysUntil} days (${nextStr})`;
+
+  if (daysAgo === 0) return { label:'Watered today', dot:'dot-ok', next:nextLabel };
+  if (daysAgo === 1) return { label:'Watered yesterday', dot:'dot-ok', next:nextLabel };
+  if (daysAgo < waterDays) return { label:`Watered ${daysAgo} days ago`, dot:'dot-ok', next:nextLabel };
+  if (daysAgo === waterDays) return { label:`Due today!`, dot:'dot-soon', next:nextLabel };
+  return { label:`Overdue by ${daysAgo - waterDays} day${daysAgo - waterDays > 1 ? 's' : ''}!`, dot:'dot-due', next:nextLabel };
 }
 
 function renderPlantGrid() {
