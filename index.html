@@ -303,6 +303,26 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'Every 30 days, let roots dry between'},{icon:'🌡',label:'Temperature',value:'18–28°C, min 15°C at night'},{icon:'🌱',label:'Soil',value:'Bark-based orchid mix only'}],
    watering:'Soak the pot in water for 15 min once every month, then drain fully. Never let roots sit in water. Reduce in winter if not in active growth.',
    seasonal:[{s:'Spring',t:'Resume feeding with orchid fertilizer every 2 weeks.'},{s:'Summer',t:'Water weekly, keep bright and warm.'},{s:'Autumn',t:'Reduce watering slightly. Keep warm.'},{s:'Winter',t:'Minimal water. Cool nights (15°C) can trigger reblooming.'}]},
+  {key:'tamarind',name:'Tamarind',latin:'Tamarindus indica',loc:'Balcony / Office',badge:'office',frost:true,wind:false,waterDays:5,
+   needs:[{icon:'☀️',label:'Light',value:'Full sun — loves maximum light'},{icon:'💧',label:'Water',value:'Regularly — keep moist but not soggy'},{icon:'🌡',label:'Temperature',value:'Min 15°C — tropical, bring in before autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
+   watering:'Water regularly in summer — keep soil evenly moist. Reduce in winter. Do not let sit in water.',
+   seasonal:[{s:'Spring',t:'Move to balcony after frost risk. Resume watering and feeding.'},{s:'Summer',t:'Full sun on balcony. Water regularly, fertilize monthly.'},{s:'Autumn',t:'Bring indoors before temperatures drop below 15°C.'},{s:'Winter',t:'Bright office spot. Reduce watering significantly.'}]},
+  {key:'coffee_arabica',name:'Coffee Arabica',latin:'Coffea arabica',loc:'Office',badge:'office',frost:true,wind:false,waterDays:7,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect to some direct morning sun'},{icon:'💧',label:'Water',value:'Keep evenly moist — never dry out'},{icon:'🌡',label:'Temperature',value:'16–24°C, no cold draughts'},{icon:'🌱',label:'Soil',value:'Slightly acidic, well-draining (pH 6–6.5)'}],
+   watering:'Water when top 2–3 cm is dry. Use filtered or rainwater if possible — sensitive to fluoride like the fern. Mist occasionally for humidity.',
+   seasonal:[{s:'Spring',t:'Active growth — water regularly, feed monthly.'},{s:'Summer',t:'Keep bright, water consistently. Watch for dry air.'},{s:'Autumn',t:'Reduce watering slightly.'},{s:'Winter',t:'Reduce watering. Keep above 16°C. Stop fertilizing.'}]},
+  {key:'monstera_big',name:'Monstera (large)',latin:'Monstera deliciosa',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:7,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'When top 3–5 cm is dry'},{icon:'🌡',label:'Temperature',value:'15–30°C'},{icon:'🌱',label:'Soil',value:'Well-draining with perlite'}],
+   watering:'Stick finger 3–5 cm deep — water only when dry. Large plants need more water than small ones. Yellowing = overwatering. Add a moss pole to support climbing.',
+   seasonal:[{s:'Spring',t:'Active growth — water and feed regularly.'},{s:'Summer',t:'Feed every 2–4 weeks. Wipe leaves.'},{s:'Autumn',t:'Reduce watering.'},{s:'Winter',t:'Water every 2–3 weeks. Stop fertilizing.'}]},
+  {key:'strelitzia_big',name:'Strelitzia (large)',latin:'Strelitzia reginae',loc:'Bedroom',badge:'living',frost:true,wind:false,waterDays:7,
+   needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
+   watering:'Less is more — overwatering is the main killer. Water deeply then wait. In winter: once every 3–4 weeks only.',
+   seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright spot. Minimal water.'}]},
+  {key:'mimosa',name:'Mimosa',latin:'Mimosa pudica',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:3,
+   needs:[{icon:'☀️',label:'Light',value:'Bright indirect to some direct sun'},{icon:'💧',label:'Water',value:'Keep moist — water every 2–3 days'},{icon:'🌡',label:'Temperature',value:'18–30°C, no cold draughts'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic mix'}],
+   watering:'Keep soil evenly moist but not waterlogged. Water when top 1–2 cm feels dry. Sensitive to fluoride — use filtered water if possible.',
+   seasonal:[{s:'Spring',t:'Active growth — water regularly, feed monthly.'},{s:'Summer',t:'Enjoys warmth and bright light. Water consistently.'},{s:'Autumn',t:'Reduce watering. Keep warm.'},{s:'Winter',t:'Reduce watering. Keep above 18°C. Avoid cold windowsills.'}]}
 ];
 
 function getWaterStatus(key, waterDays) {
