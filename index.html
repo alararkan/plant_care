@@ -441,7 +441,9 @@ function openPlant(key) {
   const p = plants.find(x => x.key === key);
   if (!p) return;
   window._currentPlantKey = key;
-  document.getElementById('modal-img').src = `images/${p.key}.jpg`;
+  const imgEl = document.getElementById('modal-img');
+  imgEl.src = `images/${p.key}.png`;
+  imgEl.onerror = () => { imgEl.src = `images/${p.key}.jpg`; };
   document.getElementById('modal-img').alt = p.name;
   document.getElementById('modal-name').textContent = p.name;
   document.getElementById('modal-latin').textContent = p.latin;
