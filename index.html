@@ -145,7 +145,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 20 plants</div>
+  <div class="header-sub">Bremen · 21 plants</div>
 </div>
 
 <div class="body">
@@ -323,6 +323,10 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect to some direct sun'},{icon:'💧',label:'Water',value:'Keep moist — water every 2–3 days'},{icon:'🌡',label:'Temperature',value:'18–30°C, no cold draughts'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic mix'}],
    watering:'Keep soil evenly moist but not waterlogged. Water when top 1–2 cm feels dry. Sensitive to fluoride — use filtered water if possible.',
    seasonal:[{s:'Spring',t:'Active growth — water regularly, feed monthly.'},{s:'Summer',t:'Enjoys warmth and bright light. Water consistently.'},{s:'Autumn',t:'Reduce watering. Keep warm.'},{s:'Winter',t:'Reduce watering. Keep above 18°C. Avoid cold windowsills.'}]}
+  ,{key:'blackberry',name:'Blackberry',latin:"Rubus fruticosus 'Thornless Evergreen'",loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:2,
+   needs:[{icon:'☀️',label:'Light',value:'Sunny to partial shade — balcony ideal'},{icon:'💧',label:'Water',value:'Regularly — every 1–2 days in summer'},{icon:'🌡',label:'Temperature',value:'Hardy — tolerates frost well'},{icon:'🌱',label:'Soil',value:'Well-draining, humus-rich, nutrient-rich'}],
+   watering:'Water regularly in summer — small pot dries fast. Keep evenly moist but not waterlogged. Empty saucer after rain.',
+   seasonal:[{s:'Spring',t:'Cut back in early spring. Apply fertilizer. Move to balcony.'},{s:'Summer',t:'White flowers June–July. Water daily. Harvest berries from August.'},{s:'Autumn',t:'Reduce watering after harvest. Cut back long shoots.'},{s:'Winter',t:'Hardy outdoors. Insulate pot in hard frost. Water sparingly.'}]}
 ];
 
 function getWaterStatus(key, waterDays) {
