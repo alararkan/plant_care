@@ -468,21 +468,23 @@ function renderPlantGrid() {
     </div>`;
   }).join('');
 
-  // Check for overdue plants and add alert
+  updateWateringAlert();
+}
+
+function updateWateringAlert() {
   const overdue = plants.filter(p => {
-    const s = getWaterStatus(p.key, p.waterDays);
-    return s.dot === 'dot-due';
+    const d = getWaterStatus(p.key, p.waterDays).dot;
+    return d === 'dot-due' || d === 'dot-soon';
   }).map(p => p.name);
+  const existing = document.getElementById('watering-alert');
+  if (existing) existing.remove();
   if (overdue.length > 0) {
-    const existing = document.getElementById('watering-alert');
-    if (!existing) {
-      const alertDiv = document.createElement('div');
-      alertDiv.id = 'watering-alert';
-      alertDiv.className = 'alert alert-danger';
-      alertDiv.style.animationDelay = '0s';
-      alertDiv.innerHTML = `<span class="alert-icon">💧</span><div><div class="alert-msg">These plants need watering!</div><div class="alert-plants">${overdue.join(', ')}</div></div>`;
-      document.getElementById('alerts').prepend(alertDiv);
-    }
+    const alertDiv = document.createElement('div');
+    alertDiv.id = 'watering-alert';
+    alertDiv.className = 'alert alert-danger';
+    alertDiv.style.animationDelay = '0s';
+    alertDiv.innerHTML = `<span class="alert-icon">💧</span><div><div class="alert-msg">These plants need watering!</div><div class="alert-plants">${overdue.join(', ')}</div></div>`;
+    document.getElementById('alerts').prepend(alertDiv);
   }
 }
 
@@ -667,6 +669,7 @@ async function loadAll() {
     if(w.temp>=15&&w.temp<=25&&w.rain<2&&w.wind<20&&m2>=4&&m2<=9) weatherAlerts.push({t:'ok',i:'🌱',msg:`Perfect growing weather today!`,pl:'All plants'});
     if(weatherAlerts.length===0) weatherAlerts.push({t:'ok',i:'✓',msg:`All conditions normal — no special action needed today.`,pl:'All plants'});
     document.getElementById('alerts').innerHTML = weatherAlerts.map((a,i) => `<div class="alert alert-${a.t}" style="animation-delay:${i*0.06}s"><span class="alert-icon">${a.i}</span><div><div class="alert-msg">${a.msg}</div><div class="alert-plants">${a.pl}</div></div></div>`).join('');
+    updateWateringAlert();
     renderPlantGrid();
   } catch(e) {
     document.getElementById('wdesc').textContent = 'Error';
