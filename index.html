@@ -149,7 +149,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 26 plants</div>
+  <div class="header-sub">Bremen · 27 plants</div>
 </div>
 
 <div class="body">
@@ -352,6 +352,10 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright, as much sun as possible'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Winter rest at 8–12°C, dry'},{icon:'🌱',label:'Soil',value:'Cactus mix with grit'}],
    watering:'Water thoroughly only when the soil is completely dry, then let it drain. Check every few weeks. Turn the pot now and then so it grows straight.',
    seasonal:[{s:'Spring',t:'Resume watering, feed lightly.'},{s:'Summer',t:'Water every 2–4 weeks. Full sun.'},{s:'Autumn',t:'Water less and less.'},{s:'Winter',t:'Dormant. Cool, bright and dry.'}]},
+  {key:'lavender',name:'Lavender',latin:'Lavandula angustifolia',loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:7,
+   needs:[{icon:'☀️',label:'Light',value:'Full sun'},{icon:'💧',label:'Water',value:'Sparingly, drought tolerant'},{icon:'🌡',label:'Temperature',value:'Hardy to about −15°C'},{icon:'🌱',label:'Soil',value:'Lean, gritty, very well-draining'}],
+   watering:'Water only when the soil is dry, and much less in winter. Wet feet and winter damp are what kill it, so keep the pot raised and the drainage holes clear.',
+   seasonal:[{s:'Spring',t:'Prune lightly into the green growth, never into old bare wood.'},{s:'Summer',t:'Flowers. Water when dry. Harvest stems.'},{s:'Autumn',t:'Cut off spent flower stalks. Do not cut hard now.'},{s:'Winter',t:'Stays outside. Keep off wet saucers, water very rarely. Shelter from heavy rain if you can.'}]},
 ];
 
 const orchidBase = plants.find(p => p.key === 'orchid');
