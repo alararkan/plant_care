@@ -425,11 +425,15 @@ function getWaterStatus(key, baseDays) {
   }
 
   // Latest soil moisture reading that is moist or wet and newer than the last watering
-  let skipUntil = null, skipWord = '';
+  let skipUntil = null, skipWord = '', dryNow = false;
   const sData = window._soilData;
   if (sData && sData[key]) {
     const reads = Object.values(sData[key]).filter(e => e.moist).sort((a,b) => b.ts - a.ts);
     const r = reads[0];
+    if (r && r.moist === 'low') {
+      const readDay = new Date(r.ts); readDay.setHours(0,0,0,0);
+      if (!wateredDay || readDay >= wateredDay) dryNow = true;
+    }
     if (r && (r.moist === 'mid' || r.moist === 'high')) {
       const readDay = new Date(r.ts); readDay.setHours(0,0,0,0);
       if (!wateredDay || readDay >= wateredDay) {
@@ -439,6 +443,8 @@ function getWaterStatus(key, baseDays) {
       }
     }
   }
+
+  if (dryNow) return { label:'Soil is dry, water now!', dot:'dot-due', next:'Soil check says dry' };
 
   if (!wateredDay && !skipUntil) return { label:'Never watered', dot:'dot-never', next:null };
 
