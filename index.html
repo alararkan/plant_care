@@ -328,8 +328,31 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
    watering:'Less is more — overwatering is the main killer. Water deeply then wait. In winter: once every 3–4 weeks only.',
    seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright spot. Minimal water.'}]},
+  {key:'passiflora',name:'Passion Flower',latin:'Passiflora sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:4,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, some direct sun'},{icon:'💧',label:'Water',value:'When top 2–3 cm is dry'},{icon:'🌡',label:'Temperature',value:'Winter rest at 10–15°C'},{icon:'🌱',label:'Support',value:'Needs a trellis or hoop to climb'}],
+   watering:'Water when the top 2–3 cm is dry. Needs plenty of water in summer, much less in winter. Never leave it standing in water.',
+   seasonal:[{s:'Spring',t:'Repot if rootbound. Start feeding. Prune back.'},{s:'Summer',t:'Flowering. Water often, feed every 2 weeks.'},{s:'Autumn',t:'Reduce watering. Trim long shoots.'},{s:'Winter',t:'Cool bright spot. Sparse water. May drop leaves.'}]},
+  {key:'mint',name:'Mint',latin:'Mentha sp.',loc:'Kitchen',badge:'kitchen',frost:false,wind:false,waterDays:2,
+   needs:[{icon:'☀️',label:'Light',value:'Bright to partial shade'},{icon:'💧',label:'Water',value:'Keep evenly moist'},{icon:'🌡',label:'Temperature',value:'Cool to moderate, 10–22°C'},{icon:'✂️',label:'Harvest',value:'Pinch tips often for bushy growth'}],
+   watering:'Mint likes constant moisture and sulks when dry. Check every 2 days. Keep it in its own pot, because the roots spread.',
+   seasonal:[{s:'Spring',t:'Fast growth. Feed lightly, harvest often.'},{s:'Summer',t:'Water daily if hot. Pinch off flower buds.'},{s:'Autumn',t:'Growth slows. Reduce watering.'},{s:'Winter',t:'Rests. Water less, no feeding.'}]},
+  {key:'loquat',name:'Loquat',latin:'Eriobotrya japonica',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:5,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, tolerates full sun'},{icon:'💧',label:'Water',value:'When top 3 cm is dry'},{icon:'🌡',label:'Temperature',value:'Cool winter 5–15°C is fine'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
+   watering:'Water when the top 3 cm is dry and let it drain fully. Grown from seed, so young roots rot easily if kept wet.',
+   seasonal:[{s:'Spring',t:'Feed monthly. Repot when roots fill the pot.'},{s:'Summer',t:'Can go outside in sun. Water regularly.'},{s:'Autumn',t:'Bring in before frost. Reduce watering.'},{s:'Winter',t:'Bright cool spot. Water sparingly.'}]},
+  {key:'avocado',name:'Avocado',latin:'Persea americana',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:5,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, some direct sun'},{icon:'💧',label:'Water',value:'When top 3–4 cm is dry'},{icon:'🌡',label:'Temperature',value:'Above 10°C, ideally 15–25°C'},{icon:'✂️',label:'Pinching',value:'Pinch tips at ~30 cm to make it branch'}],
+   watering:'Roots rot very easily, so always let the top 3–4 cm dry out first and use a pot with good drainage. Droopy leaves can mean too much water, not too little.',
+   seasonal:[{s:'Spring',t:'Start feeding. Pinch tips. Repot if needed.'},{s:'Summer',t:'Water regularly. Can go outside in sun.'},{s:'Autumn',t:'Bring in before cold nights.'},{s:'Winter',t:'Bright spot, less water, no feeding.'}]},
 ];
 
+const orchidBase = plants.find(p => p.key === 'orchid');
+plants.push({...orchidBase, key:'orchid_2', name:'Orchid 2', img:'orchid'});
+plants.push({...orchidBase, key:'orchid_3', name:'Orchid 3', img:'orchid'});
+
+const strelBase = plants.find(p => p.key === 'strelitzia_big');
+plants.push({...strelBase, key:'strelitzia_3', name:'Strelitzia (living room)', loc:'Living room', badge:'living', img:'strelitzia_big'});
+  
 function getWaterStatus(key, waterDays) {
   const data = window._wateringData;
   if (!data || !data[key]) return { label:'Never watered', dot:'dot-never', next:null };
@@ -358,7 +381,8 @@ function getWaterStatus(key, waterDays) {
 }
 
 function renderPlantGrid() {
-  document.getElementById('plantgrid').innerHTML = plants.map(p => {
+    document.querySelector('.header-sub').textContent = 'Bremen · ' + plants.length + ' plants';
+    document.getElementById('plantgrid').innerHTML = plants.map(p => {
     const status = getWaterStatus(p.key, p.waterDays);
     return `<div class="plant-card" onclick="openPlant('${p.key}')">
       <div class="plant-name">${p.name}</div>
@@ -503,8 +527,8 @@ function openPlant(key) {
   if (!p) return;
   window._currentPlantKey = key;
   const imgEl = document.getElementById('modal-img');
-  imgEl.src = `images/${p.key}.png`;
-  imgEl.onerror = () => { imgEl.src = `images/${p.key}.jpg`; };
+  imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = `images/${p.img || p.key}.jpg`; };
+  imgEl.src = `images/${p.img || p.key}.png`;
   document.getElementById('modal-img').alt = p.name;
   document.getElementById('modal-name').textContent = p.name;
   document.getElementById('modal-latin').textContent = p.latin;
