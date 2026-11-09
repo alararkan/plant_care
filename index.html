@@ -199,6 +199,14 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
         </div>
         <div class="water-history" id="modal-repot-history"></div>
         </div>
+      <div class="modal-section">Fertilizing log</div>
+      <div class="water-log-card">
+        <div class="water-log-header">
+          <div class="water-log-status" id="modal-fert-status">Never fertilized</div>
+          <button class="water-btn-main" style="background:#5B7F2B;" onclick="logFertilizing()">🌱 Fertilized</button>
+        </div>
+        <div class="water-history" id="modal-fert-history"></div>
+      </div>
         <div class="modal-section">Soil check</div>
       <div class="water-log-card">
         <div class="water-log-header">
@@ -249,6 +257,10 @@ onValue(ref(db, 'watering'), (snapshot) => {
   renderPlantGrid();
   if (window._currentPlantKey) updateModalWaterLog(window._currentPlantKey);
 });
+onValue(ref(db, 'fertilizing'), (snapshot) => {
+  window._fertData = snapshot.val() || {};
+  if (window._currentPlantKey) updateModalFert(window._currentPlantKey);
+});
 onValue(ref(db, 'soil'), (snapshot) => {
   window._soilData = snapshot.val() || {};
   renderPlantGrid();
@@ -269,10 +281,6 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Morning sun, afternoon shade'},{icon:'💧',label:'Water',value:'Every 1–2 days in summer'},{icon:'🌡',label:'Temperature',value:'Hardy to −15°C'},{icon:'🌱',label:'Soil',value:'Acidic, well-draining'}],
    watering:'If very dry: soak pot from below for 30–60 min. Ongoing: water when top 2 cm is dry. Use saucer but empty after rain.',
    seasonal:[{s:'Spring',t:'Cover if frost forecast. Apply fertilizer once.'},{s:'Summer',t:'Water daily. Ensure afternoon shade.'},{s:'Autumn',t:'Reduce watering. Prune if needed.'},{s:'Winter',t:'Wrap pot for insulation. Water sparingly.'}]},
-  {key:'cherry_tomato',name:'Cherry Tomato',latin:"Solanum lycopersicum 'Ildi'",loc:'Balcony',badge:'balcony',frost:true,wind:true,waterDays:1,
-   needs:[{icon:'☀️',label:'Light',value:'Full sun, 6–8 hrs minimum'},{icon:'💧',label:'Water',value:'Deeply and regularly'},{icon:'🌡',label:'Temperature',value:'Outside from late May only'},{icon:'🌱',label:'Soil',value:'Rich, well-draining with perlite'}],
-   watering:'Water at soil level. Avoid wetting leaves. Check daily in summer. Consistent moisture prevents blossom-end rot.',
-   seasonal:[{s:'Spring',t:'Keep indoors until after mid-May frosts.'},{s:'Summer',t:'Main growing and fruiting season.'},{s:'Autumn',t:'Harvest before first frost.'},{s:'Winter',t:'Annual — compost after season.'}]},
   {key:'glechoma',name:'Ground Ivy',latin:'Glechoma hederacea',loc:'Kitchen',badge:'kitchen',frost:false,wind:false,waterDays:7,
    needs:[{icon:'☀️',label:'Light',value:'Partial to full shade'},{icon:'💧',label:'Water',value:'Moderately — check weekly'},{icon:'🌡',label:'Temperature',value:'Very hardy, tolerates frost'},{icon:'🌱',label:'Soil',value:'Any well-draining mix'}],
    watering:'Tolerant of some neglect. Check weekly. Reduce in winter. Keep in pot — invasive if planted in garden.',
@@ -313,7 +321,7 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect to low light'},{icon:'💧',label:'Water',value:'Let top 2–3 cm dry between waterings'},{icon:'🌡',label:'Temperature',value:'12–21°C — prefers cool'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
    watering:'Water moderately. Mist leaves occasionally to deter spider mites. Overwatering is the main risk.',
    seasonal:[{s:'Spring',t:'Grows actively — feed every 2–4 weeks.'},{s:'Summer',t:'Feed regularly. Watch for spider mites.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Handles cool rooms well. Water less.'}]},
-  {key:'orchid',name:'Orchid 1',latin:'Phalaenopsis sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+  {key:'orchid',name:'Orchid 1',latin:'Phalaenopsis sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,winterX:1,
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'Every 30 days, let roots dry between'},{icon:'🌡',label:'Temperature',value:'18–28°C, min 15°C at night'},{icon:'🌱',label:'Soil',value:'Bark-based orchid mix only'}],
    watering:'Soak the pot in water for 15 min once every month, then drain fully. Never let roots sit in water. Reduce in winter if not in active growth.',
    seasonal:[{s:'Spring',t:'Resume feeding with orchid fertilizer every 2 weeks.'},{s:'Summer',t:'Water weekly, keep bright and warm.'},{s:'Autumn',t:'Reduce watering slightly. Keep warm.'},{s:'Winter',t:'Minimal water. Cool nights (15°C) can trigger reblooming.'}]},
@@ -349,19 +357,19 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright, some direct sun'},{icon:'💧',label:'Water',value:'When top 3–4 cm is dry'},{icon:'🌡',label:'Temperature',value:'Above 10°C, ideally 15–25°C'},{icon:'✂️',label:'Pinching',value:'Pinch tips at ~30 cm to make it branch'}],
    watering:'Roots rot very easily, so always let the top 3–4 cm dry out first and use a pot with good drainage. Droopy leaves can mean too much water, not too little.',
    seasonal:[{s:'Spring',t:'Start feeding. Pinch tips. Repot if needed.'},{s:'Summer',t:'Water regularly. Can go outside in sun.'},{s:'Autumn',t:'Bring in before cold nights.'},{s:'Winter',t:'Bright spot, less water, no feeding.'}]},
-  {key:'astrophytum',name:'Star Cactus',latin:'Astrophytum asterias',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+  {key:'astrophytum',name:'Star Cactus',latin:'Astrophytum asterias',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,winterX:2,
    needs:[{icon:'☀️',label:'Light',value:'Very bright, direct sun is fine'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Winter rest at 8–12°C, dry'},{icon:'🌱',label:'Soil',value:'Gritty, mineral, fast-draining'}],
    watering:'Water only when the soil is completely dry, then a little. Never let it sit in water, and keep water off the body. Roots rot easily.',
    seasonal:[{s:'Spring',t:'Start light watering as growth restarts.'},{s:'Summer',t:'Water about every 3–4 weeks. Bright spot.'},{s:'Autumn',t:'Taper watering off.'},{s:'Winter',t:'Dormant. Keep cool and dry, no water.'}]},
-  {key:'cactus',name:'Columnar Cactus',latin:'Cactaceae sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+  {key:'cactus',name:'Columnar Cactus',latin:'Cactaceae sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,winterX:2,
    needs:[{icon:'☀️',label:'Light',value:'Bright, as much sun as possible'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Winter rest at 8–12°C, dry'},{icon:'🌱',label:'Soil',value:'Cactus mix with grit'}],
    watering:'Water thoroughly only when the soil is completely dry, then let it drain. Check every few weeks. Turn the pot now and then so it grows straight.',
    seasonal:[{s:'Spring',t:'Resume watering, feed lightly.'},{s:'Summer',t:'Water every 2–4 weeks. Full sun.'},{s:'Autumn',t:'Water less and less.'},{s:'Winter',t:'Dormant. Cool, bright and dry.'}]},
-  {key:'lavender',name:'Lavender',latin:'Lavandula angustifolia',loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:7,
+  {key:'lavender',name:'Lavender',latin:'Lavandula angustifolia',loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:7,winterX:2,
    needs:[{icon:'☀️',label:'Light',value:'Full sun'},{icon:'💧',label:'Water',value:'Sparingly, drought tolerant'},{icon:'🌡',label:'Temperature',value:'Hardy to about −15°C'},{icon:'🌱',label:'Soil',value:'Lean, gritty, very well-draining'}],
    watering:'Water only when the soil is dry, and much less in winter. Wet feet and winter damp are what kill it, so keep the pot raised and the drainage holes clear.',
    seasonal:[{s:'Spring',t:'Prune lightly into the green growth, never into old bare wood.'},{s:'Summer',t:'Flowers. Water when dry. Harvest stems.'},{s:'Autumn',t:'Cut off spent flower stalks. Do not cut hard now.'},{s:'Winter',t:'Stays outside. Keep off wet saucers, water very rarely. Shelter from heavy rain if you can.'}]},
-  {key:'euphorbia',name:'African Milk Tree',latin:'Euphorbia trigona',loc:'Balcony',badge:'balcony',frost:true,wind:false,waterDays:21,
+  {key:'euphorbia',name:'African Milk Tree',latin:'Euphorbia trigona',loc:'Balcony',badge:'balcony',frost:true,wind:false,waterDays:21,winterX:2,
    needs:[{icon:'☀️',label:'Light',value:'Bright, tolerates full sun'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Not frost hardy, bring in below 10°C'},{icon:'⚠️',label:'Caution',value:'Milky sap is toxic and irritating'}],
    watering:'Water only when the soil is completely dry, then drain well. Very little in winter. Wear gloves when pruning, because the sap irritates skin and eyes.',
    seasonal:[{s:'Spring',t:'Move out once nights stay above 10°C. Feed lightly.'},{s:'Summer',t:'Sun is fine. Water every 2–3 weeks.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright, warm spot indoors. Almost no water.'}]},
@@ -382,7 +390,29 @@ plants.push({...orchidBase, key:'orchid_3', name:'Orchid 3', img:'orchid'});
 const strelBase = plants.find(p => p.key === 'strelitzia_big');
 plants.push({...strelBase, key:'strelitzia_3', name:'Strelitzia (living room)', loc:'Living room', badge:'living', img:'strelitzia_big'});
   
-function getWaterStatus(key, waterDays) {
+function seasonFactor(p) {
+  const m = new Date().getMonth() + 1;
+  const w = p.winterX || 1.5;
+  if (m >= 11 || m <= 2) return w;
+  if (m === 3 || m === 10) return 1 + (w - 1) / 2;
+  return 1;
+}
+function weatherFactor(p) {
+  const w = window._weather;
+  if (!w || p.badge !== 'balcony') return 1;
+  let f = 1;
+  if (w.rain >= 5) f *= 1.5;
+  if (w.temp >= 27) f *= 0.75;
+  return f;
+}
+function effInterval(p) {
+  return Math.max(1, Math.round(p.waterDays * seasonFactor(p) * weatherFactor(p)));
+}
+
+function getWaterStatus(key, baseDays) {
+  const plant = plants.find(x => x.key === key);
+  const waterDays = plant ? effInterval(plant) : baseDays;
+  const adjusted = waterDays !== baseDays;
   const wData = window._wateringData;
   const today = new Date(); today.setHours(0,0,0,0);
   const fmt = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'long'});
@@ -429,15 +459,16 @@ function getWaterStatus(key, waterDays) {
   const nextLabel = daysUntil <= 0 ? `Next watering: today (${nextStr})` :
                     daysUntil === 1 ? `Next watering: tomorrow (${nextStr})` :
                     `Next watering: in ${daysUntil} days (${nextStr})`;
+  const nextFull = nextLabel + (adjusted ? ` · now every ${waterDays} days` : '');
 
-  if (postponed && daysUntil > 0) return { label:`Soil is ${skipWord}, no need to water`, dot:'dot-ok', next:nextLabel };
+  if (postponed && daysUntil > 0) return { label:`Soil is ${skipWord}, no need to water`, dot:'dot-ok', next:nextFull };
 
-  if (daysAgo === null) return { label:`Due today!`, dot:'dot-soon', next:nextLabel };
-  if (daysAgo === 0) return { label:'Watered today', dot:'dot-ok', next:nextLabel };
-  if (daysAgo === 1) return { label:'Watered yesterday', dot:'dot-ok', next:nextLabel };
-  if (daysAgo < waterDays) return { label:`Watered ${daysAgo} days ago`, dot:'dot-ok', next:nextLabel };
-  if (daysAgo === waterDays) return { label:`Due today!`, dot:'dot-soon', next:nextLabel };
-  return { label:`Overdue by ${daysAgo - waterDays} day${daysAgo - waterDays > 1 ? 's' : ''}!`, dot:'dot-due', next:nextLabel };
+  if (daysAgo === null) return { label:`Due today!`, dot:'dot-soon', next:nextFull };
+  if (daysAgo === 0) return { label:'Watered today', dot:'dot-ok', next:nextFull };
+  if (daysAgo === 1) return { label:'Watered yesterday', dot:'dot-ok', next:nextFull };
+  if (daysAgo < waterDays) return { label:`Watered ${daysAgo} days ago`, dot:'dot-ok', next:nextFull };
+  if (daysAgo === waterDays) return { label:`Due today!`, dot:'dot-soon', next:nextFull };
+  return { label:`Overdue by ${daysAgo - waterDays} day${daysAgo - waterDays > 1 ? 's' : ''}!`, dot:'dot-due', next:nextFull };
 }
 
 function thumbFallback(img) {
@@ -497,6 +528,29 @@ function quickWater(key) {
 function logWatering() {
   if (!window._currentPlantKey || !window._db) return;
   quickWater(window._currentPlantKey);
+}
+
+function logFertilizing() {
+  if (!window._currentPlantKey || !window._db) return;
+  window._push(window._ref(window._db, `fertilizing/${window._currentPlantKey}`), { ts: Date.now(), date: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}) });
+}
+
+function updateModalFert(key) {
+  const st = document.getElementById('modal-fert-status');
+  const hi = document.getElementById('modal-fert-history');
+  if (!st || !hi) return;
+  const m = new Date().getMonth() + 1;
+  const resting = (m >= 11 || m <= 2);
+  const d = window._fertData && window._fertData[key];
+  if (d) {
+    const entries = Object.values(d).sort((a,b) => b.ts - a.ts);
+    const days = Math.round((Date.now() - entries[0].ts) / 86400000);
+    st.textContent = `Last fed: ${entries[0].date} (${days === 0 ? 'today' : days + ' days ago'})`;
+    hi.innerHTML = `<div class="history-title">Fertilizing history</div>` + entries.slice(0,5).map(e => `<div class="history-item">🌱 ${e.date}</div>`).join('') + (resting ? `<div class="history-item">Resting season: no feeding needed until March.</div>` : '');
+  } else {
+    st.textContent = 'Never fertilized';
+    hi.innerHTML = `<div class="history-title">${resting ? 'Resting season: no feeding needed until March.' : 'No feedings logged yet'}</div>`;
+  }
 }
 
 function logRepotting() {
@@ -612,7 +666,7 @@ function openPlant(key) {
   document.body.style.overflow = 'hidden';
     window._soilSel = {};
   renderSoilForm();
-  updateModalSoil(key);
+  updateModalSoil(key); updateModalFert(key);
 }
 
 function closeModal(e) {
@@ -653,14 +707,15 @@ async function loadAll() {
       return `<div class="forecast-day"><div class="fc-day">${DAYS[day.getDay()]}</div><div class="fc-icon">${WIC[code]||'🌤'}</div><div class="fc-temp">${Math.round(fc.temperature_2m_max[i+1])}° / ${Math.round(fc.temperature_2m_min[i+1])}°</div><div class="fc-rain">${fc.precipitation_sum[i+1].toFixed(1)} mm</div></div>`;
     }).join('');
     const w = {temp:c.temperature_2m,feels:c.apparent_temperature,humidity:c.relative_humidity_2m,rain:c.precipitation,wind:c.wind_speed_10m};
+    window._weather = {temp:w.temp, rain:(fc.precipitation_sum[0]||0)+(fc.precipitation_sum[1]||0)};
     const m2 = new Date().getMonth()+1;
     const balcony = plants.filter(p=>p.badge==='balcony').map(p=>p.name);
     const frostSens = plants.filter(p=>p.frost&&p.badge==='balcony').map(p=>p.name);
     const weatherAlerts = [];
-    if(w.feels<=2&&m2>=3&&m2<=5) weatherAlerts.push({t:'danger',i:'❄️',msg:`Late frost risk! Cover your balcony plants and bring Cherry Tomato inside.`,pl:frostSens.join(', ')});
+    if(w.feels<=2&&m2>=3&&m2<=5) weatherAlerts.push({t:'danger',i:'❄️',msg:`Late frost risk! Cover your balcony plants or bring them inside.`,pl:frostSens.join(', ')});
     else if(w.feels<=2) weatherAlerts.push({t:'danger',i:'❄️',msg:`Near freezing (feels ${Math.round(w.feels)}°C). Bring frost-sensitive balcony plants indoors.`,pl:frostSens.join(', ')});
     if(w.temp>28) weatherAlerts.push({t:'warn',i:'☀️',msg:`Hot day (${Math.round(w.temp)}°C) — water balcony plants morning and evening.`,pl:balcony.join(', ')});
-    if(w.wind>35) weatherAlerts.push({t:'warn',i:'💨',msg:`Strong winds (${Math.round(w.wind)} km/h) — shelter your Cherry Tomato.`,pl:'Cherry Tomato'});
+    if(w.wind>35) weatherAlerts.push({t:'warn',i:'💨',msg:`Strong winds (${Math.round(w.wind)} km/h) — shelter your balcony plants.`,pl:balcony.join(', ')});
     else if(w.wind>22) weatherAlerts.push({t:'info',i:'💨',msg:`Breezy (${Math.round(w.wind)} km/h) — keep an eye on your balcony plants.`,pl:balcony.join(', ')});
     if(w.rain>5) weatherAlerts.push({t:'ok',i:'🌧',msg:`Good rain (${w.rain.toFixed(1)} mm) — balcony plants covered. Empty saucers when it stops.`,pl:balcony.join(', ')});
     else if(w.rain===0&&w.humidity<40) weatherAlerts.push({t:'warn',i:'💧',msg:`Very dry — water all balcony plants today.`,pl:'All balcony plants'});
