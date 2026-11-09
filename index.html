@@ -264,10 +264,6 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Morning sun, afternoon shade'},{icon:'💧',label:'Water',value:'Every 1–2 days in summer'},{icon:'🌡',label:'Temperature',value:'Hardy to −15°C'},{icon:'🌱',label:'Soil',value:'Acidic, well-draining'}],
    watering:'If very dry: soak pot from below for 30–60 min. Ongoing: water when top 2 cm is dry. Use saucer but empty after rain.',
    seasonal:[{s:'Spring',t:'Cover if frost forecast. Apply fertilizer once.'},{s:'Summer',t:'Water daily. Ensure afternoon shade.'},{s:'Autumn',t:'Reduce watering. Prune if needed.'},{s:'Winter',t:'Wrap pot for insulation. Water sparingly.'}]},
-  {key:'strawberry',name:'Strawberry',latin:"Fragaria × ananassa 'Elan'",loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:1,
-   needs:[{icon:'☀️',label:'Light',value:'6+ hrs direct sun daily'},{icon:'💧',label:'Water',value:'Daily — never let dry out'},{icon:'🌡',label:'Temperature',value:'15–25°C preferred'},{icon:'🌱',label:'Soil',value:'Slightly acidic, enriched'}],
-   watering:'Water at soil level, not on leaves or fruit. Check daily — small pots dry fast. Empty saucer after rain.',
-   seasonal:[{s:'Spring',t:'Move to balcony when frost risk passes.'},{s:'Summer',t:'Fruit season — water daily, feed every 2 weeks.'},{s:'Autumn',t:'Cut back, let plant rest.'},{s:'Winter',t:'Bring indoors or insulate pot.'}]},
   {key:'cherry_tomato',name:'Cherry Tomato',latin:"Solanum lycopersicum 'Ildi'",loc:'Balcony',badge:'balcony',frost:true,wind:true,waterDays:1,
    needs:[{icon:'☀️',label:'Light',value:'Full sun, 6–8 hrs minimum'},{icon:'💧',label:'Water',value:'Deeply and regularly'},{icon:'🌡',label:'Temperature',value:'Outside from late May only'},{icon:'🌱',label:'Soil',value:'Rich, well-draining with perlite'}],
    watering:'Water at soil level. Avoid wetting leaves. Check daily in summer. Consistent moisture prevents blossom-end rot.',
@@ -304,10 +300,6 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Low to medium indirect'},{icon:'💧',label:'Water',value:'When top 2–3 cm is dry'},{icon:'🌡',label:'Temperature',value:'16–27°C'},{icon:'💦',label:'Humidity',value:'Moderate — mist occasionally'}],
    watering:'Water moderately. Use filtered water if possible — tap fluoride causes brown tips. Let water sit overnight if using tap.',
    seasonal:[{s:'Spring',t:'Regular watering, feed monthly.'},{s:'Summer',t:'Mist occasionally. Feed monthly.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Wipe fronds. Minimal water.'}]},
-  {key:'basil',name:'Basil',latin:'Ocimum basilicum',loc:'Kitchen',badge:'kitchen',frost:true,wind:true,waterDays:1,
-   needs:[{icon:'☀️',label:'Light',value:'6+ hrs — grow light recommended'},{icon:'💧',label:'Water',value:'Daily — small pot dries fast'},{icon:'🌡',label:'Temperature',value:'Always above 18°C'},{icon:'✂️',label:'Harvest',value:'Pinch above leaf node, max 1/3'}],
-   watering:'Bottom-water when possible. Check daily. Pinch flower buds immediately — once it flowers, leaves turn bitter.',
-   seasonal:[{s:'Spring',t:'Prime season — keep warm and sunny.'},{s:'Summer',t:'Harvest regularly to prevent flowering.'},{s:'Autumn',t:'Supplement with grow light as days shorten.'},{s:'Winter',t:'Annual — will die. Resow in spring.'}]},
   {key:'fuchsia',name:'Fuchsia',latin:'Fuchsia hybrida',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:2,
    needs:[{icon:'☀️',label:'Light',value:'Partial to full shade'},{icon:'💧',label:'Water',value:'Keep moist — very thirsty in summer'},{icon:'🌡',label:'Temperature',value:'5–22°C, bring in before October'},{icon:'🌸',label:'Flowering',value:'Summer — feed high-K weekly'}],
    watering:'Water generously in summer — check daily in warm weather. In winter: reduce drastically but never let roots fully dry.',
@@ -336,14 +328,6 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
    watering:'Less is more — overwatering is the main killer. Water deeply then wait. In winter: once every 3–4 weeks only.',
    seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright spot. Minimal water.'}]},
-  {key:'mimosa',name:'Mimosa',latin:'Mimosa pudica',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:3,
-   needs:[{icon:'☀️',label:'Light',value:'Bright indirect to some direct sun'},{icon:'💧',label:'Water',value:'Keep moist — water every 2–3 days'},{icon:'🌡',label:'Temperature',value:'18–30°C, no cold draughts'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic mix'}],
-   watering:'Keep soil evenly moist but not waterlogged. Water when top 1–2 cm feels dry. Sensitive to fluoride — use filtered water if possible.',
-   seasonal:[{s:'Spring',t:'Active growth — water regularly, feed monthly.'},{s:'Summer',t:'Enjoys warmth and bright light. Water consistently.'},{s:'Autumn',t:'Reduce watering. Keep warm.'},{s:'Winter',t:'Reduce watering. Keep above 18°C. Avoid cold windowsills.'}]}
-  ,{key:'blackberry',name:'Blackberry',latin:"Rubus fruticosus 'Thornless Evergreen'",loc:'Balcony',badge:'balcony',frost:false,wind:false,waterDays:2,
-   needs:[{icon:'☀️',label:'Light',value:'Sunny to partial shade — balcony ideal'},{icon:'💧',label:'Water',value:'Regularly — every 1–2 days in summer'},{icon:'🌡',label:'Temperature',value:'Hardy — tolerates frost well'},{icon:'🌱',label:'Soil',value:'Well-draining, humus-rich, nutrient-rich'}],
-   watering:'Water regularly in summer — small pot dries fast. Keep evenly moist but not waterlogged. Empty saucer after rain.',
-   seasonal:[{s:'Spring',t:'Cut back in early spring. Apply fertilizer. Move to balcony.'},{s:'Summer',t:'White flowers June–July. Water daily. Harvest berries from August.'},{s:'Autumn',t:'Reduce watering after harvest. Cut back long shoots.'},{s:'Winter',t:'Hardy outdoors. Insulate pot in hard frost. Water sparingly.'}]}
 ];
 
 function getWaterStatus(key, waterDays) {
