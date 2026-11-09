@@ -149,7 +149,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 24 plants</div>
+  <div class="header-sub">Bremen · 26 plants</div>
 </div>
 
 <div class="body">
@@ -344,6 +344,14 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright, some direct sun'},{icon:'💧',label:'Water',value:'When top 3–4 cm is dry'},{icon:'🌡',label:'Temperature',value:'Above 10°C, ideally 15–25°C'},{icon:'✂️',label:'Pinching',value:'Pinch tips at ~30 cm to make it branch'}],
    watering:'Roots rot very easily, so always let the top 3–4 cm dry out first and use a pot with good drainage. Droopy leaves can mean too much water, not too little.',
    seasonal:[{s:'Spring',t:'Start feeding. Pinch tips. Repot if needed.'},{s:'Summer',t:'Water regularly. Can go outside in sun.'},{s:'Autumn',t:'Bring in before cold nights.'},{s:'Winter',t:'Bright spot, less water, no feeding.'}]},
+  {key:'astrophytum',name:'Star Cactus',latin:'Astrophytum asterias',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+   needs:[{icon:'☀️',label:'Light',value:'Very bright, direct sun is fine'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Winter rest at 8–12°C, dry'},{icon:'🌱',label:'Soil',value:'Gritty, mineral, fast-draining'}],
+   watering:'Water only when the soil is completely dry, then a little. Never let it sit in water, and keep water off the body. Roots rot easily.',
+   seasonal:[{s:'Spring',t:'Start light watering as growth restarts.'},{s:'Summer',t:'Water about every 3–4 weeks. Bright spot.'},{s:'Autumn',t:'Taper watering off.'},{s:'Winter',t:'Dormant. Keep cool and dry, no water.'}]},
+  {key:'cactus',name:'Columnar Cactus',latin:'Cactaceae sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, as much sun as possible'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Winter rest at 8–12°C, dry'},{icon:'🌱',label:'Soil',value:'Cactus mix with grit'}],
+   watering:'Water thoroughly only when the soil is completely dry, then let it drain. Check every few weeks. Turn the pot now and then so it grows straight.',
+   seasonal:[{s:'Spring',t:'Resume watering, feed lightly.'},{s:'Summer',t:'Water every 2–4 weeks. Full sun.'},{s:'Autumn',t:'Water less and less.'},{s:'Winter',t:'Dormant. Cool, bright and dry.'}]},
 ];
 
 const orchidBase = plants.find(p => p.key === 'orchid');
