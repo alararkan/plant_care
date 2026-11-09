@@ -134,7 +134,11 @@ body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--te
 .history-title { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-light); margin-bottom:8px; }
 .history-item { font-size:13px; color:var(--text-muted); padding:4px 0; border-bottom:1px solid var(--cream); }
 .history-item:last-child { border-bottom:none; }
-
+.soil-row { margin-bottom:14px; }
+.soil-options { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+.soil-opt { border:1.5px solid var(--cream-dark); background:#fff; border-radius:10px; padding:9px 4px; font-size:12px; font-family:'DM Sans',sans-serif; color:var(--text-muted); cursor:pointer; }
+.soil-opt.selected { background:var(--green-light); border-color:var(--green); color:var(--green-dark); font-weight:500; }
+  
 .loading { font-size:14px; color:var(--text-muted); padding:12px 0; font-style:italic; }
 .error-box { background:var(--danger); border-left:3px solid var(--danger-b); border-radius:14px; padding:13px 14px; font-size:14px; color:var(--danger-t); }
 footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:8px; }
@@ -190,6 +194,15 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
           <button class="water-btn-main" style="background:#7C3A00;" onclick="logRepotting()">🪴 Repotted</button>
         </div>
         <div class="water-history" id="modal-repot-history"></div>
+        </div>
+        <div class="modal-section">Soil check</div>
+      <div class="water-log-card">
+        <div class="water-log-header">
+          <div class="water-log-status" id="modal-soil-status">Never checked</div>
+          <button class="water-btn-main" style="background:#2D3A8C;" onclick="saveSoil()">Save check</button>
+        </div>
+        <div id="soil-form"></div>
+        <div class="water-history" id="modal-soil-history"></div>
       </div>
       <div class="modal-section">Basic needs</div>
       <div class="needs-grid" id="modal-needs"></div>
@@ -231,6 +244,10 @@ onValue(ref(db, 'watering'), (snapshot) => {
   window._wateringData = snapshot.val() || {};
   renderPlantGrid();
   if (window._currentPlantKey) updateModalWaterLog(window._currentPlantKey);
+});
+onValue(ref(db, 'soil'), (snapshot) => {
+  window._soilData = snapshot.val() || {};
+  if (window._currentPlantKey) updateModalSoil(window._currentPlantKey);
 });
 </script>
 
@@ -409,6 +426,62 @@ function logRepotting() {
   window._push(window._ref(window._db, `repotting/${window._currentPlantKey}`), { ts, date: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}) });
 }
 
+  const SOIL = {
+  ph:    {title:'pH',        opts:[['low','🍋 Acidic'],['mid','🌿 Neutral'],['high','🧼 Alkaline']]},
+  moist: {title:'Moisture',  opts:[['low','🏜 Dry'],['mid','💧 Moist'],['high','🌊 Wet']]},
+  fert:  {title:'Fertility', opts:[['low','🍽 Low'],['mid','🌱 Balanced'],['high','🧂 Overfed']]}
+};
+window._soilSel = {};
+window._soilData = {};
+
+function soilLabel(group, val) {
+  const o = SOIL[group].opts.find(x => x[0] === val);
+  return o ? o[1] : '–';
+}
+
+function renderSoilForm() {
+  document.getElementById('soil-form').innerHTML = Object.keys(SOIL).map(g => `
+    <div class="soil-row">
+      <div class="history-title">${SOIL[g].title}</div>
+      <div class="soil-options">
+        ${SOIL[g].opts.map(o => `<button class="soil-opt ${window._soilSel[g] === o[0] ? 'selected' : ''}" onclick="pickSoil('${g}','${o[0]}')">${o[1]}</button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function pickSoil(g, v) {
+  window._soilSel[g] = v;
+  renderSoilForm();
+}
+
+function saveSoil() {
+  const s = window._soilSel;
+  if (!window._currentPlantKey || !window._db) return;
+  if (!s.ph && !s.moist && !s.fert) return;
+  window._push(window._ref(window._db, `soil/${window._currentPlantKey}`), {
+    ts: Date.now(),
+    date: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}),
+    ph: s.ph || null, moist: s.moist || null, fert: s.fert || null
+  });
+  window._soilSel = {};
+  renderSoilForm();
+}
+
+function updateModalSoil(key) {
+  const d = window._soilData && window._soilData[key];
+  const hist = document.getElementById('modal-soil-history');
+  if (!d) {
+    document.getElementById('modal-soil-status').textContent = 'Never checked';
+    hist.innerHTML = '<div class="history-title">No soil checks logged yet</div>';
+    return;
+  }
+  const entries = Object.values(d).sort((a,b) => b.ts - a.ts);
+  document.getElementById('modal-soil-status').textContent = 'Last checked: ' + entries[0].date;
+  hist.innerHTML = '<div class="history-title">Recent checks</div>' + entries.slice(0,5).map(e =>
+    `<div class="history-item">${e.date}<br>pH: ${soilLabel('ph', e.ph)} · Moisture: ${soilLabel('moist', e.moist)} · Fertility: ${soilLabel('fert', e.fert)}</div>`
+  ).join('');
+}
+  
 function updateModalWaterLog(key) {
   const p = plants.find(x => x.key === key);
   if (!p) return;
@@ -458,6 +531,9 @@ function openPlant(key) {
   updateModalWaterLog(key);
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+    window._soilSel = {};
+  renderSoilForm();
+  updateModalSoil(key);
 }
 
 function closeModal(e) {
