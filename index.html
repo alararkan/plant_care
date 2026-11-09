@@ -149,7 +149,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 21 plants</div>
+  <div class="header-sub">Bremen · 24 plants</div>
 </div>
 
 <div class="body">
@@ -260,7 +260,7 @@ window._wateringData = {};
 window._currentPlantKey = null;
 
 const plants=[
-  {key:'japanese_maple',name:'Japanese Maple',latin:'Acer palmatum',loc:'Balcony',badge:'balcony',frost:true,wind:true,waterDays:2,
+  {key:'japanese_maple',name:'Japanese Maple',latin:'Acer palmatum',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:4,
    needs:[{icon:'☀️',label:'Light',value:'Morning sun, afternoon shade'},{icon:'💧',label:'Water',value:'Every 1–2 days in summer'},{icon:'🌡',label:'Temperature',value:'Hardy to −15°C'},{icon:'🌱',label:'Soil',value:'Acidic, well-draining'}],
    watering:'If very dry: soak pot from below for 30–60 min. Ongoing: water when top 2 cm is dry. Use saucer but empty after rain.',
    seasonal:[{s:'Spring',t:'Cover if frost forecast. Apply fertilizer once.'},{s:'Summer',t:'Water daily. Ensure afternoon shade.'},{s:'Autumn',t:'Reduce watering. Prune if needed.'},{s:'Winter',t:'Wrap pot for insulation. Water sparingly.'}]},
@@ -272,7 +272,7 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Partial to full shade'},{icon:'💧',label:'Water',value:'Moderately — check weekly'},{icon:'🌡',label:'Temperature',value:'Very hardy, tolerates frost'},{icon:'🌱',label:'Soil',value:'Any well-draining mix'}],
    watering:'Tolerant of some neglect. Check weekly. Reduce in winter. Keep in pot — invasive if planted in garden.',
    seasonal:[{s:'Spring',t:'Grows vigorously — trim regularly.'},{s:'Summer',t:'Keep trimmed, fertilize monthly.'},{s:'Autumn',t:'Growth slows.'},{s:'Winter',t:'May die back — keep barely moist, will regrow.'}]},
-  {key:'strelitzia',name:'Strelitzia',latin:'Strelitzia nicolai',loc:'Office',badge:'office',frost:true,wind:false,waterDays:7,
+  {key:'strelitzia',name:'Strelitzia (office)',latin:'Strelitzia nicolai',loc:'Office',badge:'office',frost:true,wind:false,waterDays:7,
    needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
    watering:'Less is more — overwatering is the main killer. Water deeply, then wait. In winter: once every 3–4 weeks only.',
    seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright indoor spot. Minimal water.'}]},
@@ -308,7 +308,7 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect to low light'},{icon:'💧',label:'Water',value:'Let top 2–3 cm dry between waterings'},{icon:'🌡',label:'Temperature',value:'12–21°C — prefers cool'},{icon:'🌱',label:'Soil',value:'Well-draining, slightly acidic'}],
    watering:'Water moderately. Mist leaves occasionally to deter spider mites. Overwatering is the main risk.',
    seasonal:[{s:'Spring',t:'Grows actively — feed every 2–4 weeks.'},{s:'Summer',t:'Feed regularly. Watch for spider mites.'},{s:'Autumn',t:'Reduce watering and stop feeding.'},{s:'Winter',t:'Handles cool rooms well. Water less.'}]},
-  {key:'orchid',name:'Orchid',latin:'Phalaenopsis sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
+  {key:'orchid',name:'Orchid 1',latin:'Phalaenopsis sp.',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:30,
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'Every 30 days, let roots dry between'},{icon:'🌡',label:'Temperature',value:'18–28°C, min 15°C at night'},{icon:'🌱',label:'Soil',value:'Bark-based orchid mix only'}],
    watering:'Soak the pot in water for 15 min once every month, then drain fully. Never let roots sit in water. Reduce in winter if not in active growth.',
    seasonal:[{s:'Spring',t:'Resume feeding with orchid fertilizer every 2 weeks.'},{s:'Summer',t:'Water weekly, keep bright and warm.'},{s:'Autumn',t:'Reduce watering slightly. Keep warm.'},{s:'Winter',t:'Minimal water. Cool nights (15°C) can trigger reblooming.'}]},
@@ -324,7 +324,7 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright indirect — no direct sun'},{icon:'💧',label:'Water',value:'When top 3–5 cm is dry'},{icon:'🌡',label:'Temperature',value:'15–30°C'},{icon:'🌱',label:'Soil',value:'Well-draining with perlite'}],
    watering:'Stick finger 3–5 cm deep — water only when dry. Large plants need more water than small ones. Yellowing = overwatering. Add a moss pole to support climbing.',
    seasonal:[{s:'Spring',t:'Active growth — water and feed regularly.'},{s:'Summer',t:'Feed every 2–4 weeks. Wipe leaves.'},{s:'Autumn',t:'Reduce watering.'},{s:'Winter',t:'Water every 2–3 weeks. Stop fertilizing.'}]},
-  {key:'strelitzia_big',name:'Strelitzia (large)',latin:'Strelitzia nicolai',loc:'Bedroom',badge:'living',frost:true,wind:false,waterDays:7,
+  {key:'strelitzia_big',name:'Strelitzia (large)',latin:'Strelitzia nicolai',loc:'Living room',badge:'living',frost:true,wind:false,waterDays:7,
    needs:[{icon:'☀️',label:'Light',value:'Bright direct sun — max light'},{icon:'💧',label:'Water',value:'Let top half dry between waterings'},{icon:'🌡',label:'Temperature',value:'Min 10°C — indoors in autumn'},{icon:'🌱',label:'Soil',value:'Well-draining, sandy mix'}],
    watering:'Less is more — overwatering is the main killer. Water deeply then wait. In winter: once every 3–4 weeks only.',
    seasonal:[{s:'Spring',t:'Resume watering and feeding. Move to sunniest spot.'},{s:'Summer',t:'Can go on balcony in full sun.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright spot. Minimal water.'}]},
@@ -437,7 +437,7 @@ function logRepotting() {
   const SOIL = {
   ph:    {title:'pH',        opts:[['low','🍋 Acidic'],['mid','🌿 Neutral'],['high','🧼 Alkaline']]},
   moist: {title:'Moisture',  opts:[['low','🏜 Dry'],['mid','💧 Moist'],['high','🌊 Wet']]},
-  fert:  {title:'Fertility', opts:[['low','🍽 Low'],['mid','🌱 Balanced'],['high','🧂 Overfed']]}
+  fert:  {title:'Fertility', opts:[['low','🍽 Low'],['mid','🌱 Okay'],['high','🧂 High']]}
 };
 window._soilSel = {};
 window._soilData = {};
@@ -586,14 +586,14 @@ async function loadAll() {
     const balcony = plants.filter(p=>p.badge==='balcony').map(p=>p.name);
     const frostSens = plants.filter(p=>p.frost&&p.badge==='balcony').map(p=>p.name);
     const weatherAlerts = [];
-    if(w.feels<=2&&m2>=3&&m2<=5) weatherAlerts.push({t:'danger',i:'❄️',msg:`Late frost risk! Cover your Japanese Maple and bring Cherry Tomato & Basil inside.`,pl:frostSens.join(', ')});
+    if(w.feels<=2&&m2>=3&&m2<=5) weatherAlerts.push({t:'danger',i:'❄️',msg:`Late frost risk! Cover your balcony plants and bring Cherry Tomato inside.`,pl:frostSens.join(', ')});
     else if(w.feels<=2) weatherAlerts.push({t:'danger',i:'❄️',msg:`Near freezing (feels ${Math.round(w.feels)}°C). Bring frost-sensitive balcony plants indoors.`,pl:frostSens.join(', ')});
     if(w.temp>28) weatherAlerts.push({t:'warn',i:'☀️',msg:`Hot day (${Math.round(w.temp)}°C) — water balcony plants morning and evening.`,pl:balcony.join(', ')});
-    if(w.wind>35) weatherAlerts.push({t:'warn',i:'💨',msg:`Strong winds (${Math.round(w.wind)} km/h) — shelter Japanese Maple and Cherry Tomato.`,pl:'Japanese Maple, Cherry Tomato, Basil'});
-    else if(w.wind>22) weatherAlerts.push({t:'info',i:'💨',msg:`Breezy (${Math.round(w.wind)} km/h) — keep an eye on the Japanese Maple.`,pl:'Japanese Maple'});
+    if(w.wind>35) weatherAlerts.push({t:'warn',i:'💨',msg:`Strong winds (${Math.round(w.wind)} km/h) — shelter your Cherry Tomato.`,pl:'Cherry Tomato'});
+    else if(w.wind>22) weatherAlerts.push({t:'info',i:'💨',msg:`Breezy (${Math.round(w.wind)} km/h) — keep an eye on your balcony plants.`,pl:balcony.join(', ')});
     if(w.rain>5) weatherAlerts.push({t:'ok',i:'🌧',msg:`Good rain (${w.rain.toFixed(1)} mm) — balcony plants covered. Empty saucers when it stops.`,pl:balcony.join(', ')});
     else if(w.rain===0&&w.humidity<40) weatherAlerts.push({t:'warn',i:'💧',msg:`Very dry — water all balcony plants today.`,pl:'All balcony plants'});
-    else if(w.rain===0&&w.humidity<55) weatherAlerts.push({t:'info',i:'💧',msg:`No rain — check balcony soil and water if top 2 cm feels dry.`,pl:'Japanese Maple, Strawberry, Cherry Tomato'});
+    else if(w.rain===0&&w.humidity<55) weatherAlerts.push({t:'info',i:'💧',msg:`No rain — check balcony soil and water if top 2 cm feels dry.`,pl:balcony.join(', ')});
     if(w.humidity>80) weatherAlerts.push({t:'ok',i:'🌿',msg:`High humidity — Fern, Pothos and Monstera will love it. No need to mist.`,pl:'Fern, Pothos, Monstera'});
     if(w.temp>=15&&w.temp<=25&&w.rain<2&&w.wind<20&&m2>=4&&m2<=9) weatherAlerts.push({t:'ok',i:'🌱',msg:`Perfect growing weather today!`,pl:'All plants'});
     if(weatherAlerts.length===0) weatherAlerts.push({t:'ok',i:'✓',msg:`All conditions normal — no special action needed today.`,pl:'All plants'});
