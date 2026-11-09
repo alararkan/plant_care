@@ -149,7 +149,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 28 plants</div>
+  <div class="header-sub">Bremen · 30 plants</div>
 </div>
 
 <div class="body">
@@ -360,6 +360,14 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Bright, tolerates full sun'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Not frost hardy, bring in below 10°C'},{icon:'⚠️',label:'Caution',value:'Milky sap is toxic and irritating'}],
    watering:'Water only when the soil is completely dry, then drain well. Very little in winter. Wear gloves when pruning, because the sap irritates skin and eyes.',
    seasonal:[{s:'Spring',t:'Move out once nights stay above 10°C. Feed lightly.'},{s:'Summer',t:'Sun is fine. Water every 2–3 weeks.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright, warm spot indoors. Almost no water.'}]},
+  {key:'pelargonium',name:'Geranium',latin:'Pelargonium sp.',loc:'Office',badge:'office',frost:true,wind:false,waterDays:6,
+   needs:[{icon:'☀️',label:'Light',value:'Very bright, sun is fine'},{icon:'💧',label:'Water',value:'When top 2–3 cm is dry'},{icon:'🌡',label:'Temperature',value:'Winter rest at 5–12°C, frost-free'},{icon:'🌱',label:'Soil',value:'Well-draining mix'}],
+   watering:'Let the soil dry between waterings and never leave it in a wet saucer. Yellow lower leaves usually mean too much water or too little light. Remove them.',
+   seasonal:[{s:'Spring',t:'Cut back leggy stems, repot, start feeding.'},{s:'Summer',t:'Blooms. Water regularly, feed every 2 weeks.'},{s:'Autumn',t:'Bring in before frost. Reduce watering.'},{s:'Winter',t:'Cool bright spot. Water sparingly, no feeding.'}]},
+  {key:'kalanchoe',name:'Flaming Katy',latin:'Kalanchoe blossfeldiana',loc:'Office',badge:'office',frost:true,wind:false,waterDays:10,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, some direct sun'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry'},{icon:'🌡',label:'Temperature',value:'Above 10°C, ideally 15–25°C'},{icon:'✂️',label:'Pruning',value:'Snip off faded flower stalks'}],
+   watering:'Succulent leaves store water, so water only when the soil is dry and never leave it standing. Overwatering causes rot.',
+   seasonal:[{s:'Spring',t:'Trim after flowering, repot if needed.'},{s:'Summer',t:'Bright spot, water every 1–2 weeks.'},{s:'Autumn',t:'Short days trigger buds. Give 12 hours of darkness at night.'},{s:'Winter',t:'Blooms. Keep bright, water lightly.'}]},
 ];
 
 const orchidBase = plants.find(p => p.key === 'orchid');
