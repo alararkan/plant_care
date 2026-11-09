@@ -406,7 +406,7 @@ function getWaterStatus(key, waterDays) {
 
 function renderPlantGrid() {
     document.querySelector('.header-sub').textContent = 'Bremen · ' + plants.length + ' plants';
-    document.getElementById('plantgrid').innerHTML = plants.map(p => {
+    document.getElementById('plantgrid').innerHTML = [...plants].sort((a,b) => a.name.localeCompare(b.name)).map(p => {
     const status = getWaterStatus(p.key, p.waterDays);
     return `<div class="plant-card" onclick="openPlant('${p.key}')">
       <div class="plant-name">${p.name}</div>
