@@ -418,9 +418,10 @@ function getWaterStatus(key, baseDays) {
   const fmt = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'long'});
 
   // Last watering (calendar day), if any
-  let wateredDay = null;
+  let wateredDay = null, wateredTs = 0;
   if (wData && wData[key]) {
     const latest = Object.values(wData[key]).sort((a,b) => b.ts - a.ts)[0];
+    wateredTs = latest.ts;
     wateredDay = new Date(latest.ts); wateredDay.setHours(0,0,0,0);
   }
 
@@ -430,13 +431,10 @@ function getWaterStatus(key, baseDays) {
   if (sData && sData[key]) {
     const reads = Object.values(sData[key]).filter(e => e.moist).sort((a,b) => b.ts - a.ts);
     const r = reads[0];
-    if (r && r.moist === 'low') {
-      const readDay = new Date(r.ts); readDay.setHours(0,0,0,0);
-      if (!wateredDay || readDay >= wateredDay) dryNow = true;
-    }
+    if (r && r.moist === 'low' && r.ts > wateredTs) dryNow = true;
     if (r && (r.moist === 'mid' || r.moist === 'high')) {
       const readDay = new Date(r.ts); readDay.setHours(0,0,0,0);
-      if (!wateredDay || readDay >= wateredDay) {
+      if (r.ts > wateredTs) {
         skipUntil = new Date(readDay);
         skipUntil.setDate(skipUntil.getDate() + (r.moist === 'high' ? waterDays : Math.ceil(waterDays / 2)));
         skipWord = r.moist === 'high' ? 'wet' : 'moist';
