@@ -247,7 +247,8 @@ onValue(ref(db, 'watering'), (snapshot) => {
 });
 onValue(ref(db, 'soil'), (snapshot) => {
   window._soilData = snapshot.val() || {};
-  if (window._currentPlantKey) updateModalSoil(window._currentPlantKey);
+  renderPlantGrid();
+  if (window._currentPlantKey) { updateModalSoil(window._currentPlantKey); updateModalWaterLog(window._currentPlantKey); }
 });
 </script>
 
@@ -378,25 +379,56 @@ const strelBase = plants.find(p => p.key === 'strelitzia_big');
 plants.push({...strelBase, key:'strelitzia_3', name:'Strelitzia (living room)', loc:'Living room', badge:'living', img:'strelitzia_big'});
   
 function getWaterStatus(key, waterDays) {
-  const data = window._wateringData;
-  if (!data || !data[key]) return { label:'Never watered', dot:'dot-never', next:null };
-  const entries = Object.values(data[key]);
-  const latest = entries.sort((a,b) => b.ts - a.ts)[0];
-
-  // Compare calendar days, not hours
+  const wData = window._wateringData;
   const today = new Date(); today.setHours(0,0,0,0);
-  const wateredDay = new Date(latest.ts); wateredDay.setHours(0,0,0,0);
-  const daysAgo = Math.round((today - wateredDay) / 86400000);
+  const fmt = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'long'});
 
-  // Next watering date
-  const nextDate = new Date(wateredDay);
-  nextDate.setDate(nextDate.getDate() + waterDays);
+  // Last watering (calendar day), if any
+  let wateredDay = null;
+  if (wData && wData[key]) {
+    const latest = Object.values(wData[key]).sort((a,b) => b.ts - a.ts)[0];
+    wateredDay = new Date(latest.ts); wateredDay.setHours(0,0,0,0);
+  }
+
+  // Latest soil moisture reading that is moist or wet and newer than the last watering
+  let skipUntil = null, skipWord = '';
+  const sData = window._soilData;
+  if (sData && sData[key]) {
+    const reads = Object.values(sData[key]).filter(e => e.moist).sort((a,b) => b.ts - a.ts);
+    const r = reads[0];
+    if (r && (r.moist === 'mid' || r.moist === 'high')) {
+      const readDay = new Date(r.ts); readDay.setHours(0,0,0,0);
+      if (!wateredDay || readDay >= wateredDay) {
+        skipUntil = new Date(readDay);
+        skipUntil.setDate(skipUntil.getDate() + (r.moist === 'high' ? waterDays : Math.ceil(waterDays / 2)));
+        skipWord = r.moist === 'high' ? 'wet' : 'moist';
+      }
+    }
+  }
+
+  if (!wateredDay && !skipUntil) return { label:'Never watered', dot:'dot-never', next:null };
+
+  // Normal schedule
+  let nextDate = null, daysAgo = null;
+  if (wateredDay) {
+    daysAgo = Math.round((today - wateredDay) / 86400000);
+    nextDate = new Date(wateredDay);
+    nextDate.setDate(nextDate.getDate() + waterDays);
+  }
+
+  // Moist/wet reading postpones the next watering
+  let postponed = false;
+  if (skipUntil && (!nextDate || skipUntil > nextDate)) { nextDate = skipUntil; postponed = true; }
+
   const daysUntil = Math.round((nextDate - today) / 86400000);
-  const nextStr = nextDate.toLocaleDateString('en-GB', {day:'numeric', month:'long'});
+  const nextStr = fmt(nextDate);
   const nextLabel = daysUntil <= 0 ? `Next watering: today (${nextStr})` :
                     daysUntil === 1 ? `Next watering: tomorrow (${nextStr})` :
                     `Next watering: in ${daysUntil} days (${nextStr})`;
 
+  if (postponed && daysUntil > 0) return { label:`Soil is ${skipWord}, no need to water`, dot:'dot-ok', next:nextLabel };
+
+  if (daysAgo === null) return { label:`Due today!`, dot:'dot-soon', next:nextLabel };
   if (daysAgo === 0) return { label:'Watered today', dot:'dot-ok', next:nextLabel };
   if (daysAgo === 1) return { label:'Watered yesterday', dot:'dot-ok', next:nextLabel };
   if (daysAgo < waterDays) return { label:`Watered ${daysAgo} days ago`, dot:'dot-ok', next:nextLabel };
