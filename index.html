@@ -149,7 +149,7 @@ footer { text-align:center; font-size:11px; color:var(--text-light); margin-top:
 <div class="header">
   <div class="header-eyebrow">🌿 Plant Care</div>
   <div class="header-title">Planties</div>
-  <div class="header-sub">Bremen · 27 plants</div>
+  <div class="header-sub">Bremen · 28 plants</div>
 </div>
 
 <div class="body">
@@ -356,6 +356,10 @@ const plants=[
    needs:[{icon:'☀️',label:'Light',value:'Full sun'},{icon:'💧',label:'Water',value:'Sparingly, drought tolerant'},{icon:'🌡',label:'Temperature',value:'Hardy to about −15°C'},{icon:'🌱',label:'Soil',value:'Lean, gritty, very well-draining'}],
    watering:'Water only when the soil is dry, and much less in winter. Wet feet and winter damp are what kill it, so keep the pot raised and the drainage holes clear.',
    seasonal:[{s:'Spring',t:'Prune lightly into the green growth, never into old bare wood.'},{s:'Summer',t:'Flowers. Water when dry. Harvest stems.'},{s:'Autumn',t:'Cut off spent flower stalks. Do not cut hard now.'},{s:'Winter',t:'Stays outside. Keep off wet saucers, water very rarely. Shelter from heavy rain if you can.'}]},
+  {key:'euphorbia',name:'African Milk Tree',latin:'Euphorbia trigona',loc:'Balcony',badge:'balcony',frost:true,wind:false,waterDays:21,
+   needs:[{icon:'☀️',label:'Light',value:'Bright, tolerates full sun'},{icon:'💧',label:'Water',value:'Sparingly, let soil dry fully'},{icon:'🌡',label:'Temperature',value:'Not frost hardy, bring in below 10°C'},{icon:'⚠️',label:'Caution',value:'Milky sap is toxic and irritating'}],
+   watering:'Water only when the soil is completely dry, then drain well. Very little in winter. Wear gloves when pruning, because the sap irritates skin and eyes.',
+   seasonal:[{s:'Spring',t:'Move out once nights stay above 10°C. Feed lightly.'},{s:'Summer',t:'Sun is fine. Water every 2–3 weeks.'},{s:'Autumn',t:'Bring inside before nights drop to 10°C.'},{s:'Winter',t:'Bright, warm spot indoors. Almost no water.'}]},
 ];
 
 const orchidBase = plants.find(p => p.key === 'orchid');
